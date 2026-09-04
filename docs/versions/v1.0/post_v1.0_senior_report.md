@@ -1,11 +1,11 @@
 ---
 
-# Aryntra Avni — Post-V1.0.0 Senior Implementation Report
+# Aryntra Avni â€” Post-V1.0.0 Senior Implementation Report
 
 **Prepared for:** Senior Architect / Project Lead
 **Author:** V1.0 Implementation Team
 **Date:** 2026-05-09
-**Baseline:** v0.5.0 → v1.0.0
+**Baseline:** v0.5.0 â†’ v1.0.0
 **Branch:** `v1.0-voice-identity` (10 commits, clean linear history)
 **Tag:** `v1.0.0`
 
@@ -13,7 +13,7 @@
 
 ## 1. Executive Summary
 
-Aryntra Avni V1.0 has been successfully delivered. The milestone transforms Avni from a **declarative TTS renderer router** (V0.5) into a system with a **persistent, reusable Voice Identity primitive** that supports the complete identity lifecycle: enrollment, representation extraction, consent-aware persistence, dynamic resolution, and synthesis — all without breaking a single V0.5 contract, adapter, or test.
+Aryntra Avni V1.0 has been successfully delivered. The milestone transforms Avni from a **declarative TTS renderer router** (V0.5) into a system with a **persistent, reusable Voice Identity primitive** that supports the complete identity lifecycle: enrollment, representation extraction, consent-aware persistence, dynamic resolution, and synthesis â€” all without breaking a single V0.5 contract, adapter, or test.
 
 The implementation followed a strict **inspect-before-modify** protocol. An initial inspection report was produced before any production code was touched. All changes are additive. The existing `VoiceRequest`, `VoiceResponse`, `TTSRenderer`, `VoiceCapability`, fallback policy, and both renderer adapters (`edge_tts`, `piper`) remain structurally and semantically unchanged.
 
@@ -25,14 +25,14 @@ The implementation followed a strict **inspect-before-modify** protocol. An init
 
 | Objective | Status | Evidence |
 |-----------|--------|----------|
-| Accept authorized voice recordings | ✅ Complete | `EnrollmentRequest` with 2–10 `AudioSample` inputs, consent enforcement |
-| Extract reusable voice representation | ✅ Complete | `AcousticFeatureExtractor` producing 8-dim normalized vectors |
-| Persist Voice Identity Profile | ✅ Complete | `ProfileStore` with atomic JSON writes to `data/profiles/` |
-| Resolve identity later | ✅ Complete | `VoiceCapability._resolve_identity()` checks registry then `ProfileStore` |
-| Use identity with existing TTS pathway | ✅ Complete | `IdentityLoader.load_from_profile()` binds profiles to renderers |
-| Preserve provenance and consent | ✅ Complete | `ConsentRecord` (ACTIVE/REVOKED/EXPIRED) + `ProvenanceRecord` |
-| Evaluate identity stability | ✅ Complete | Benchmark suite: determinism 1.0, separation 0.2014 |
-| Do not destabilize V0.5 | ✅ Verified | All 24 original V0.5 tests pass unchanged |
+| Accept authorized voice recordings | âœ… Complete | `EnrollmentRequest` with 2â€“10 `AudioSample` inputs, consent enforcement |
+| Extract reusable voice representation | âœ… Complete | `AcousticFeatureExtractor` producing 8-dim normalized vectors |
+| Persist Voice Identity Profile | âœ… Complete | `ProfileStore` with atomic JSON writes to `data/profiles/` |
+| Resolve identity later | âœ… Complete | `VoiceCapability._resolve_identity()` checks registry then `ProfileStore` |
+| Use identity with existing TTS pathway | âœ… Complete | `IdentityLoader.load_from_profile()` binds profiles to renderers |
+| Preserve provenance and consent | âœ… Complete | `ConsentRecord` (ACTIVE/REVOKED/EXPIRED) + `ProvenanceRecord` |
+| Evaluate identity stability | âœ… Complete | Benchmark suite: determinism 1.0, separation 0.2014 |
+| Do not destabilize V0.5 | âœ… Verified | All 24 original V0.5 tests pass unchanged |
 
 ---
 
@@ -42,69 +42,69 @@ The implementation followed a strict **inspect-before-modify** protocol. An init
 
 ```
 src/
-├── contracts/
-│   ├── voice.py              ← Extended: +representation_id, +profile_id (optional)
-│   ├── renderer.py           ← Untouched
-│   └── errors.py             ← Untouched
-├── capabilities/voice/
-│   ├── capability.py         ← Extended: +ProfileStore injection, dynamic resolution
-│   ├── identity_loader.py    ← Extended: +load_from_profile()
-│   ├── registry.py           ← Untouched
-│   └── __init__.py           ← Extended: +profiles_dir parameter
-├── adapters/tts/
-│   ├── edge_tts_adapter.py   ← Untouched
-│   └── piper_adapter.py      ← Untouched
-├── enrollment/               ← NEW (S1)
-│   ├── contracts.py          ← AudioSample, EnrollmentRequest, EnrollmentResult
-│   ├── audio_validator.py    ← WAV format, duration, sample rate validation
-│   ├── preprocessor.py       ← PCM loading, stereo-to-mono downmix
-│   └── enrollment_service.py ← Pipeline orchestrator with pluggable extractor
-├── representation/           ← NEW (S2)
-│   ├── base.py               ← VoiceRepresentation, RepresentationExtractor ABC
-│   └── acoustic_extractor.py ← 8-dim normalized acoustic statistics
-└── profiles/                 ← NEW (S3)
-    ├── consent.py            ← ConsentRecord, ConsentStatus, ProvenanceRecord
-    ├── voice_profile.py      ← VoiceIdentityProfile (schema v1.0)
-    └── profile_store.py      ← Atomic filesystem CRUD
+â”œâ”€â”€ contracts/
+â”‚   â”œâ”€â”€ voice.py              â† Extended: +representation_id, +profile_id (optional)
+â”‚   â”œâ”€â”€ renderer.py           â† Untouched
+â”‚   â””â”€â”€ errors.py             â† Untouched
+â”œâ”€â”€ capabilities/voice/
+â”‚   â”œâ”€â”€ capability.py         â† Extended: +ProfileStore injection, dynamic resolution
+â”‚   â”œâ”€â”€ identity_loader.py    â† Extended: +load_from_profile()
+â”‚   â”œâ”€â”€ registry.py           â† Untouched
+â”‚   â””â”€â”€ __init__.py           â† Extended: +profiles_dir parameter
+â”œâ”€â”€ adapters/tts/
+â”‚   â”œâ”€â”€ edge_tts_adapter.py   â† Untouched
+â”‚   â””â”€â”€ piper_adapter.py      â† Untouched
+â”œâ”€â”€ enrollment/               â† NEW (S1)
+â”‚   â”œâ”€â”€ contracts.py          â† AudioSample, EnrollmentRequest, EnrollmentResult
+â”‚   â”œâ”€â”€ audio_validator.py    â† WAV format, duration, sample rate validation
+â”‚   â”œâ”€â”€ preprocessor.py       â† PCM loading, stereo-to-mono downmix
+â”‚   â””â”€â”€ enrollment_service.py â† Pipeline orchestrator with pluggable extractor
+â”œâ”€â”€ representation/           â† NEW (S2)
+â”‚   â”œâ”€â”€ base.py               â† VoiceRepresentation, RepresentationExtractor ABC
+â”‚   â””â”€â”€ acoustic_extractor.py â† 8-dim normalized acoustic statistics
+â””â”€â”€ profiles/                 â† NEW (S3)
+    â”œâ”€â”€ consent.py            â† ConsentRecord, ConsentStatus, ProvenanceRecord
+    â”œâ”€â”€ voice_profile.py      â† VoiceIdentityProfile (schema v1.0)
+    â””â”€â”€ profile_store.py      â† Atomic filesystem CRUD
 ```
 
 ### 3.2 Data Flow
 
 ```
 Authorized Audio (2-3 WAV files)
-        │
-        ▼
+        â”‚
+        â–¼
 EnrollmentService.enroll(EnrollmentRequest)
-        │
-        ├── validate request structure & consent
-        ├── validate audio (format, duration ≥1s, rate ≥16kHz)
-        ├── preprocess (normalize, stereo→mono)
-        └── extract via RepresentationExtractor
-                │
-                ▼
+        â”‚
+        â”œâ”€â”€ validate request structure & consent
+        â”œâ”€â”€ validate audio (format, duration â‰¥1s, rate â‰¥16kHz)
+        â”œâ”€â”€ preprocess (normalize, stereoâ†’mono)
+        â””â”€â”€ extract via RepresentationExtractor
+                â”‚
+                â–¼
         VoiceRepresentation (8-dim, 64 bytes, versioned)
-                │
-                ▼
+                â”‚
+                â–¼
         VoiceIdentityProfile (consent + provenance + representation)
-                │
-                ▼
-        ProfileStore.save() → data/profiles/{id}.json
-                │
-                ▼
+                â”‚
+                â–¼
+        ProfileStore.save() â†’ data/profiles/{id}.json
+                â”‚
+                â–¼
         NAV calls VoiceCapability.synthesize(VoiceRequest(identity_id=...))
-                │
-                ├── Registry miss → ProfileStore.load()
-                ├── IdentityLoader.load_from_profile() → VoiceIdentity
-                ├── Register in-memory for fast subsequent hits
-                └── Render via Edge-TTS or Piper (with fallback)
-                        │
-                        ▼
+                â”‚
+                â”œâ”€â”€ Registry miss â†’ ProfileStore.load()
+                â”œâ”€â”€ IdentityLoader.load_from_profile() â†’ VoiceIdentity
+                â”œâ”€â”€ Register in-memory for fast subsequent hits
+                â””â”€â”€ Render via Edge-TTS or Piper (with fallback)
+                        â”‚
+                        â–¼
                 VoiceResponse (audio + identity metadata)
 ```
 
 ### 3.3 Key Architectural Invariants Preserved
 
-1. **Voice Identity ≠ Renderer.** The `VoiceIdentity` abstraction sits above any specific TTS engine. The `representation_id` and `profile_id` fields are optional and default to `None`, preserving 100% backward compatibility with V0.5 declarative identities.
+1. **Voice Identity â‰  Renderer.** The `VoiceIdentity` abstraction sits above any specific TTS engine. The `representation_id` and `profile_id` fields are optional and default to `None`, preserving 100% backward compatibility with V0.5 declarative identities.
 
 2. **Kernel knows concepts, plugins know technologies.** The `RepresentationExtractor` ABC defines `extract()` and `similarity()`. The `AcousticFeatureExtractor` is one implementation. A future neural embedding extractor (e.g., Resemblyzer, ECAPA-TDNN) would implement the same interface without touching the kernel.
 
@@ -116,48 +116,48 @@ EnrollmentService.enroll(EnrollmentRequest)
 
 ## 4. Sprint-by-Sprint Delivery Summary
 
-### Sprint 1 — Enrollment Boundary
+### Sprint 1 â€” Enrollment Boundary
 **Commits:** `a8b676b`
 **Delivered:**
 - `AudioSample`, `EnrollmentRequest`, `EnrollmentResult` frozen dataclass contracts
-- `validate_audio_file()`: WAV format check, duration bounds (1.0–60.0s), minimum 16kHz sample rate, channel limit, file size sanity
+- `validate_audio_file()`: WAV format check, duration bounds (1.0â€“60.0s), minimum 16kHz sample rate, channel limit, file size sanity
 - `preprocess_audio()`: PCM frame extraction, stereo-to-mono downmix via sample averaging
 - `EnrollmentService`: Full pipeline orchestrator accepting a pluggable `representation_extractor` parameter (None = S1 boundary mode, validates without extracting)
 - 18 unit tests covering valid/invalid audio, consent rejection, insufficient samples, mock extractor integration
 
 **Exit condition met:** Authorized recordings are reliably validated and preprocessed. Extractor boundary is ready for S2.
 
-### Sprint 2 — Representation Implementation
+### Sprint 2 â€” Representation Implementation
 **Commits:** `5d74c79`, `db6c75d`
 **Delivered:**
 - `VoiceRepresentation` frozen dataclass: `representation_id`, `version`, `data` (bytes), `metadata`
-- `RepresentationExtractor` ABC: `extract(audio_samples) → VoiceRepresentation`, `similarity(rep_a, rep_b) → float`
+- `RepresentationExtractor` ABC: `extract(audio_samples) â†’ VoiceRepresentation`, `similarity(rep_a, rep_b) â†’ float`
 - `AcousticFeatureExtractor`: Pure Python, zero external ML dependencies. Extracts 8 normalized features:
   1. Mean amplitude
   2. Standard deviation
   3. Zero-crossing rate
   4. RMS energy
-  5. Normalized spectral centroid (÷ Nyquist)
-  6. Low-band energy ratio (0–500 Hz)
-  7. Mid-band energy ratio (500–2000 Hz)
-  8. High-band energy ratio (2000–8000 Hz)
+  5. Normalized spectral centroid (Ã· Nyquist)
+  6. Low-band energy ratio (0â€“500 Hz)
+  7. Mid-band energy ratio (500â€“2000 Hz)
+  8. High-band energy ratio (2000â€“8000 Hz)
 - Cosine similarity metric for identity comparison
-- **Critical fix** (`db6c75d`): Initial 5-dim implementation suffered from scale dominance — the unnormalized spectral centroid (magnitude ~10³) overwhelmed the other features (magnitude ~10⁻¹), producing near-identical cosine angles for distinct speakers (similarity 0.9999). Normalization to [0,1] and addition of multi-band energy ratios resolved this, dropping distinct-speaker similarity to 0.2014.
+- **Critical fix** (`db6c75d`): Initial 5-dim implementation suffered from scale dominance â€” the unnormalized spectral centroid (magnitude ~10Â³) overwhelmed the other features (magnitude ~10â»Â¹), producing near-identical cosine angles for distinct speakers (similarity 0.9999). Normalization to [0,1] and addition of multi-band energy ratios resolved this, dropping distinct-speaker similarity to 0.2014.
 
 **Exit condition met:** Representation is deterministic (self-similarity = 1.0), discriminative (cross-speaker = 0.20), and replaceable behind the ABC.
 
-### Sprint 3 — Persistent Profiles
+### Sprint 3 â€” Persistent Profiles
 **Commits:** `08c8d3e`
 **Delivered:**
 - `ConsentRecord`: `source_id`, `status` (ACTIVE/REVOKED/EXPIRED), `scope`, `granted_at`, `revoked_at`, `terms_version`
 - `ProvenanceRecord`: `extractor_id`, `extractor_version`, `sample_count`, `source_sample_hashes`, `enrolled_at`
 - `VoiceIdentityProfile`: Schema version 1.0, base64-encoded representation data, full round-trip serialization
-- `ProfileStore`: Atomic file writes (`.tmp` → `.replace()`), sanitized identity IDs, structured error handling via `AvniVoiceError`
+- `ProfileStore`: Atomic file writes (`.tmp` â†’ `.replace()`), sanitized identity IDs, structured error handling via `AvniVoiceError`
 - 7 tests covering serialization round-trips, revoked consent rejection, corrupted file handling, CRUD operations
 
 **Exit condition met:** A voice identity can be enrolled once and reliably recovered after process restart.
 
-### Sprint 4 — NAV / TTS Integration
+### Sprint 4 â€” NAV / TTS Integration
 **Commits:** `dd602a8`
 **Delivered:**
 - `VoiceIdentity` extended with optional `representation_id` and `profile_id` fields (backward compatible)
@@ -165,11 +165,11 @@ EnrollmentService.enroll(EnrollmentRequest)
 - `VoiceCapability._resolve_identity()`: Checks in-memory `IdentityRegistry` first, then falls through to `ProfileStore` for on-demand loading. Auto-registers resolved identities for fast subsequent hits.
 - `create_default_voice_capability()` factory accepts optional `profiles_dir` and auto-wires `ProfileStore`
 - ADR 0010: Formal architectural decision record documenting the V1 identity primitive
-- 2 integration tests: Full lifecycle (enroll → persist → synthesize) and revoked consent blocking
+- 2 integration tests: Full lifecycle (enroll â†’ persist â†’ synthesize) and revoked consent blocking
 
 **Exit condition met:** NAV can request speech using a persistent identity ID without knowing Avni internals.
 
-### Sprint 5 — Evaluation & Closure
+### Sprint 5 â€” Evaluation & Closure
 **Commits:** `f867ead`, `8eee119`, `87fc4ed`, `8d71279`
 **Delivered:**
 - `experiments/voice/v1_eval.py`: Automated benchmark measuring determinism, speaker separation, enrollment latency, persistence latency, and end-to-end synthesis
@@ -185,19 +185,23 @@ EnrollmentService.enroll(EnrollmentRequest)
 
 | Metric | Target | Measured | Status |
 |--------|--------|----------|--------|
-| Extraction Determinism (self-similarity) | 1.0000 | **1.000000** | ✅ PASS |
-| Speaker Separation (cosine sim, distinct sources) | < 0.90 | **0.2014** | ✅ PASS |
-| Enrollment + Extraction Latency (2 samples, 2s each) | < 5000 ms | **2934 ms** | ✅ PASS |
-| Profile Persistence Write Latency | < 10 ms | **1.83 ms** | ✅ PASS |
-| End-to-End Synthesis Latency (Piper, local) | < 10 s | **4.57–5.71 s** | ✅ PASS |
-| V0.5 Regression Tests | 24/24 pass | **24/24** | ✅ PASS |
-| Total Test Suite | All pass | **66/66** | ✅ PASS |
+| Extraction Determinism (self-similarity) | 1.0000 | **1.000000** | âœ… PASS |
+| Speaker Separation (cosine sim, distinct sources) | < 0.90 | **0.2014** | âœ… PASS |
+| Enrollment + Extraction Latency (2 samples, 2s each) | < 5000 ms | **2934 ms** | âœ… PASS |
+| Profile Persistence Write Latency | < 10 ms | **1.83 ms** | âœ… PASS |
+| End-to-End Synthesis Latency (Piper, local) | < 10 s | **4.57â€“5.71 s** | âœ… PASS |
+| V0.5 Regression Tests | 24/24 pass | **24/24** | âœ… PASS |
+| Total Test Suite | All pass | **66/66** | âœ… PASS |
 
 **Notes on latency:**
 - Enrollment latency (~2.9s) is dominated by the pure-Python DFT computation in the acoustic extractor. This is acceptable for a one-time enrollment operation and would drop dramatically with a NumPy-backed or neural extractor.
-- Synthesis latency (~4.5–5.7s) includes Piper ONNX model cold-load. Subsequent calls with a warm model are significantly faster. Edge-TTS was unavailable during testing due to SSL certificate issues in the development environment, so all synthesis fell through to the Piper fallback — which itself validates the fallback architecture is working correctly.
+- Synthesis latency (~4.5â€“5.7s) includes Piper ONNX model cold-load. Subsequent calls with a warm model are significantly faster. Edge-TTS was unavailable during testing due to SSL certificate issues in the development environment, so all synthesis fell through to the Piper fallback â€” which itself validates the fallback architecture is working correctly.
 
 ---
+
+
+> **Evaluation Methodology Note:**
+> The automated benchmarks in experiments/voice/v1_eval.py use programmatic synthetic tones (200Hz, 440Hz, 2000Hz) to establish bit-exact baseline determinism and frequency discriminability without external audio dataset dependencies. Statistical validation on diverse human speech corpora is required once the manifestation layer is integrated.
 
 ## 6. Honest Limitations & Technical Debt
 
@@ -226,25 +230,25 @@ The `AcousticFeatureExtractor` produces statistical summaries (mean, variance, s
 
 | Component | V0.5 State | V1.0 State | Modified? |
 |-----------|-----------|-----------|-----------|
-| `VoiceRequest` | Frozen dataclass | Identical | ❌ No |
-| `VoiceResponse` | Frozen dataclass | Identical | ❌ No |
-| `TTSRenderer` ABC | 3 abstract methods | Identical | ❌ No |
-| `RenderResult` | Frozen dataclass | Identical | ❌ No |
-| `AvniVoiceError` | Structured exception | Identical | ❌ No |
-| `VoiceErrorCode` | 6-value enum | Identical | ❌ No |
-| `EdgeTTSAdapter` | Async edge-tts wrapper | Identical | ❌ No |
-| `PiperTTSAdapter` | Local ONNX wrapper | Identical | ❌ No |
-| `IdentityRegistry` | In-memory dict | Identical | ❌ No |
-| `RendererRegistry` | In-memory dict | Identical | ❌ No |
-| Fallback policy | In VoiceCapability | Identical location & logic | ❌ No |
-| `configs/identities/*.json` | 3 declarative profiles | Identical | ❌ No |
-| V0.5 test suite | 24 tests | 24 tests, all passing | ❌ No |
+| `VoiceRequest` | Frozen dataclass | Identical | âŒ No |
+| `VoiceResponse` | Frozen dataclass | Identical | âŒ No |
+| `TTSRenderer` ABC | 3 abstract methods | Identical | âŒ No |
+| `RenderResult` | Frozen dataclass | Identical | âŒ No |
+| `AvniVoiceError` | Structured exception | Identical | âŒ No |
+| `VoiceErrorCode` | 6-value enum | Identical | âŒ No |
+| `EdgeTTSAdapter` | Async edge-tts wrapper | Identical | âŒ No |
+| `PiperTTSAdapter` | Local ONNX wrapper | Identical | âŒ No |
+| `IdentityRegistry` | In-memory dict | Identical | âŒ No |
+| `RendererRegistry` | In-memory dict | Identical | âŒ No |
+| Fallback policy | In VoiceCapability | Identical location & logic | âŒ No |
+| `configs/identities/*.json` | 3 declarative profiles | Identical | âŒ No |
+| V0.5 test suite | 24 tests | 24 tests, all passing | âŒ No |
 
-**Only two existing files were modified:**
-1. `src/contracts/voice.py` — Added two optional fields (`representation_id`, `profile_id`) to `VoiceIdentity`. All existing fields retain their defaults. Backward compatible.
-2. `src/capabilities/voice/capability.py` — Added `ProfileStore` parameter and `_resolve_identity()` method. Existing `synthesize()` flow is preserved; the new resolution step is a transparent pre-check.
-3. `src/capabilities/voice/identity_loader.py` — Added `load_from_profile()` static method. Existing `load_from_dict()`, `load_from_json_file()`, `load_directory()` are untouched.
-4. `src/capabilities/voice/__init__.py` — Added `ProfileStore` import and `profiles_dir` parameter to factory. Existing behavior preserved.
+**Four existing files were modified (all purely additive/backward-compatible):**
+1. `src/contracts/voice.py` â€” Added two optional fields (`representation_id`, `profile_id`) to `VoiceIdentity`. All existing fields retain their defaults. Backward compatible.
+2. `src/capabilities/voice/capability.py` â€” Added `ProfileStore` parameter and `_resolve_identity()` method. Existing `synthesize()` flow is preserved; the new resolution step is a transparent pre-check.
+3. `src/capabilities/voice/identity_loader.py` â€” Added `load_from_profile()` static method. Existing `load_from_dict()`, `load_from_json_file()`, `load_directory()` are untouched.
+4. `src/capabilities/voice/__init__.py` â€” Added `ProfileStore` import and `profiles_dir` parameter to factory. Existing behavior preserved.
 
 ---
 
@@ -264,7 +268,7 @@ The `AcousticFeatureExtractor` produces statistical summaries (mean, variance, s
 
 ## 9. Final Assessment
 
-V1.0 achieves its stated mission: **Avni now possesses a reusable Voice Identity primitive.** The identity can be enrolled from authorized recordings, extracted into a versioned representation, persisted with consent and provenance, resolved on-demand by the synthesis capability, and manifested through replaceable renderers — all while maintaining complete backward compatibility with the V0.5 foundation.
+V1.0 achieves its stated mission: **Avni now possesses a reusable Voice Identity primitive.** The identity can be enrolled from authorized recordings, extracted into a versioned representation, persisted with consent and provenance, resolved on-demand by the synthesis capability, and manifested through replaceable renderers â€” all while maintaining complete backward compatibility with the V0.5 foundation.
 
 The architecture is clean, the tests are comprehensive, the limitations are honestly documented, and the foundation is ready for V2.0's neural identity capabilities.
 
