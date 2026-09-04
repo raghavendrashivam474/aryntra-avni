@@ -1,4 +1,4 @@
-﻿"""Voice Request, Response, and Identity contracts.
+"""Voice Request, Response, and Identity contracts.
 
 These are the public data structures that NAV and any other consumer
 interacts with. They must remain stable across renderer changes.
@@ -52,7 +52,7 @@ class VoiceResponse:
 class VoiceIdentity:
     """Stable representation of a voice identity.
 
-    Independent of any specific TTS engine.  The renderer_id links
+    Independent of any specific TTS engine. The renderer_id links
     this identity to a registered TTSRenderer adapter.
     """
 
@@ -60,3 +60,5 @@ class VoiceIdentity:
     renderer_id: str
     voice_configuration: Dict[str, Any] = field(default_factory=dict)
     provenance: Optional[Dict[str, Any]] = None
+    fallback_renderer_id: Optional[str] = None
+    fallback_voice_configuration: Dict[str, Any] = field(default_factory=dict)

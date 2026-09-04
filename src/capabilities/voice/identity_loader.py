@@ -41,6 +41,8 @@ class IdentityLoader:
             renderer_id=renderer_id.strip(),
             voice_configuration=data.get("voice_configuration", {}),
             provenance=data.get("provenance", {}),
+            fallback_renderer_id=data.get("fallback_renderer_id"),
+            fallback_voice_configuration=data.get("fallback_voice_configuration", {}),
         )
 
     @staticmethod

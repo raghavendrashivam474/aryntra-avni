@@ -1,7 +1,7 @@
-﻿"""Domain error definitions for Avni Voice capability."""
+"""Domain error definitions for Avni Voice capability."""
 
 from enum import Enum
-from typing import Optional
+from typing import Optional, Union
 
 
 class VoiceErrorCode(str, Enum):
@@ -22,7 +22,7 @@ class AvniVoiceError(Exception):
 
     def __init__(
         self,
-        code: VoiceErrorCode,
+        code: Union[VoiceErrorCode, str],
         message: str,
         details: Optional[dict] = None,
         cause: Optional[Exception] = None,
@@ -33,15 +33,19 @@ class AvniVoiceError(Exception):
         self.details = details or {}
         self.cause = cause
 
+    @property
+    def code_str(self) -> str:
+        return self.code.value if hasattr(self.code, "value") else str(self.code)
+
     def to_dict(self) -> dict:
         return {
-            "error_code": self.code.value,
+            "error_code": self.code_str,
             "message": self.message,
             "details": self.details,
         }
 
     def __repr__(self) -> str:
-        return f"AvniVoiceError(code={self.code.value!r}, message={self.message!r})"
+        return f"AvniVoiceError(code={self.code_str!r}, message={self.message!r})"
 
     def __str__(self) -> str:
-        return f"[{self.code.value}] {self.message}"
+        return f"[{self.code_str}] {self.message}"

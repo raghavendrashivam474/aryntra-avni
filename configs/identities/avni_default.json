@@ -6,9 +6,13 @@
     "rate": "+0%",
     "pitch": "+0Hz"
   },
+  "fallback_renderer_id": "piper",
+  "fallback_voice_configuration": {
+    "model_name": "en_US-lessac-medium"
+  },
   "provenance": {
-    "version": "v0",
+    "version": "v0.5",
     "persona": "Avni Default Assistant",
-    "created_for": "NAV V0 Integration"
+    "created_for": "NAV Integration with Offline Fallback"
   }
 }

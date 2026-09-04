@@ -10,6 +10,7 @@ from src.capabilities.voice.capability import VoiceCapability
 from src.capabilities.voice.registry import IdentityRegistry, RendererRegistry
 from src.capabilities.voice.identity_loader import IdentityLoader
 from src.adapters.tts.edge_tts_adapter import EdgeTTSAdapter
+from src.adapters.tts.piper_adapter import PiperTTSAdapter
 
 
 def create_default_voice_capability(
@@ -17,14 +18,15 @@ def create_default_voice_capability(
 ) -> VoiceCapability:
     """Factory creating a ready-to-use VoiceCapability for NAV.
 
-    Pre-registers default adapters (EdgeTTS) and loads all baseline identities
+    Pre-registers default adapters (EdgeTTS, PiperTTS) and loads all baseline identities
     from configs/identities/.
     """
     identity_reg = IdentityRegistry()
     renderer_reg = RendererRegistry()
 
-    # Register default renderer adapter
+    # Register default renderer adapters
     renderer_reg.register(EdgeTTSAdapter())
+    renderer_reg.register(PiperTTSAdapter())
 
     # Load baseline identities
     config_path = identities_dir or (Path(__file__).resolve().parents[3] / "configs" / "identities")
