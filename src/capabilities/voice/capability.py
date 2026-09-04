@@ -1,7 +1,7 @@
-"""Voice Capability — main orchestration entry point.
+﻿"""Voice Capability — main orchestration entry point.
 
 Flow:
-    validate request  →  resolve identity  →  resolve renderer  →  invoke (with fallback)  →  respond
+    validate request  →  resolve identity (Registry / ProfileStore)  →  resolve renderer  →  invoke (with fallback)  →  respond
 """
 
 import logging
@@ -12,6 +12,8 @@ from src.contracts.voice import VoiceRequest, VoiceResponse, VoiceIdentity
 from src.contracts.errors import AvniVoiceError, VoiceErrorCode
 from src.contracts.renderer import RenderResult, TTSRenderer
 from src.capabilities.voice.registry import IdentityRegistry, RendererRegistry
+from src.capabilities.voice.identity_loader import IdentityLoader
+from src.profiles.profile_store import ProfileStore
 
 logger = logging.getLogger(__name__)
 
@@ -23,9 +25,30 @@ class VoiceCapability:
         self,
         identity_registry: Optional[IdentityRegistry] = None,
         renderer_registry: Optional[RendererRegistry] = None,
+        profile_store: Optional[ProfileStore] = None,
     ) -> None:
         self.identities = identity_registry or IdentityRegistry()
         self.renderers = renderer_registry or RendererRegistry()
+        self.profile_store = profile_store
+
+    def _resolve_identity(self, identity_id: str) -> VoiceIdentity:
+        """Resolve identity from in-memory registry or on-demand from ProfileStore."""
+        if self.identities.exists(identity_id):
+            return self.identities.get(identity_id)
+
+        if self.profile_store and self.profile_store.exists(identity_id):
+            logger.info("Resolving identity '%s' from persistent ProfileStore", identity_id)
+            profile = self.profile_store.load(identity_id)
+            identity = IdentityLoader.load_from_profile(profile)
+            # Register in-memory for subsequent fast-path hits
+            self.identities.register(identity)
+            return identity
+
+        raise AvniVoiceError(
+            code=VoiceErrorCode.UNKNOWN_IDENTITY,
+            message=f"Voice identity '{identity_id}' is not registered or found in profile store.",
+            details={"identity_id": identity_id},
+        )
 
     def _render_with_renderer(
         self,
@@ -56,7 +79,7 @@ class VoiceCapability:
             ) from exc
 
     def synthesize(self, request: VoiceRequest) -> VoiceResponse:
-        """End-to-end speech synthesis with fallback resilience."""
+        """End-to-end speech synthesis with profile resolution and fallback resilience."""
         t0 = time.perf_counter()
         req_label = request.request_id or "anonymous"
         logger.info("Synthesis started | request=%s identity=%s", req_label, request.identity_id)
@@ -65,7 +88,7 @@ class VoiceCapability:
         request.validate()
 
         # 2 — resolve identity
-        identity = self.identities.get(request.identity_id)
+        identity = self._resolve_identity(request.identity_id)
 
         # 3 — attempt primary renderer
         primary_error: Optional[Exception] = None
@@ -123,7 +146,6 @@ class VoiceCapability:
                         cause=fb_exc,
                     ) from fb_exc
             else:
-                # No fallback configured — re-raise primary failure
                 if isinstance(primary_error, AvniVoiceError):
                     raise primary_error
                 raise AvniVoiceError(
@@ -147,6 +169,10 @@ class VoiceCapability:
             fallback_used=fallback_used,
             generation_latency_sec=round(elapsed, 4),
         )
+        if identity.representation_id:
+            metadata["representation_id"] = identity.representation_id
+        if identity.profile_id:
+            metadata["profile_id"] = identity.profile_id
 
         logger.info(
             "Synthesis complete | request=%s latency=%.3fs bytes=%d fallback=%s renderer=%s",

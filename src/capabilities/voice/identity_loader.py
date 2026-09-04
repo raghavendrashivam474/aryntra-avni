@@ -1,14 +1,16 @@
-"""Identity Loader for Avni Voice configurations."""
+﻿"""Identity Loader for Avni Voice configurations and profiles."""
 
 import json
 from pathlib import Path
-from typing import Dict, List, Union
+from typing import Dict, List, Union, Optional
+
 from src.contracts.voice import VoiceIdentity
 from src.contracts.errors import AvniVoiceError, VoiceErrorCode
+from src.profiles.voice_profile import VoiceIdentityProfile
 
 
 class IdentityLoader:
-    """Loads VoiceIdentity definitions from files and directories."""
+    """Loads VoiceIdentity definitions from declarative files, directories, and profiles."""
 
     @staticmethod
     def load_from_dict(data: Dict) -> VoiceIdentity:
@@ -43,6 +45,39 @@ class IdentityLoader:
             provenance=data.get("provenance", {}),
             fallback_renderer_id=data.get("fallback_renderer_id"),
             fallback_voice_configuration=data.get("fallback_voice_configuration", {}),
+            representation_id=data.get("representation_id"),
+            profile_id=data.get("profile_id"),
+        )
+
+    @staticmethod
+    def load_from_profile(
+        profile: VoiceIdentityProfile,
+        default_renderer_id: str = "edge_tts",
+        default_voice_config: Optional[Dict] = None,
+        fallback_renderer_id: Optional[str] = "piper",
+        fallback_voice_config: Optional[Dict] = None,
+    ) -> VoiceIdentity:
+        """Binds a persistent VoiceIdentityProfile to a synthesizable VoiceIdentity."""
+        profile.validate()
+        voice_cfg = default_voice_config or {}
+        # Embed representation metadata into configuration for renderer context
+        voice_cfg = dict(voice_cfg)
+        voice_cfg["representation_id"] = profile.representation.representation_id
+        voice_cfg["representation_version"] = profile.representation.version
+
+        return VoiceIdentity(
+            identity_id=profile.identity_id,
+            renderer_id=default_renderer_id,
+            voice_configuration=voice_cfg,
+            provenance={
+                "profile_schema_version": profile.schema_version,
+                "consent_source_id": profile.consent.source_id,
+                "provenance": profile.provenance.to_dict(),
+            },
+            fallback_renderer_id=fallback_renderer_id,
+            fallback_voice_configuration=fallback_voice_config or {},
+            representation_id=profile.representation.representation_id,
+            profile_id=profile.identity_id,
         )
 
     @staticmethod

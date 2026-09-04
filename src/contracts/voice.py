@@ -1,4 +1,4 @@
-"""Voice Request, Response, and Identity contracts.
+﻿"""Voice Request, Response, and Identity contracts.
 
 These are the public data structures that NAV and any other consumer
 interacts with. They must remain stable across renderer changes.
@@ -62,3 +62,5 @@ class VoiceIdentity:
     provenance: Optional[Dict[str, Any]] = None
     fallback_renderer_id: Optional[str] = None
     fallback_voice_configuration: Dict[str, Any] = field(default_factory=dict)
+    representation_id: Optional[str] = None
+    profile_id: Optional[str] = None

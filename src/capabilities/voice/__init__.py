@@ -1,4 +1,4 @@
-"""Public voice capability package for Avni."""
+﻿"""Public voice capability package for Avni."""
 
 from pathlib import Path
 from typing import Optional
@@ -11,15 +11,17 @@ from src.capabilities.voice.registry import IdentityRegistry, RendererRegistry
 from src.capabilities.voice.identity_loader import IdentityLoader
 from src.adapters.tts.edge_tts_adapter import EdgeTTSAdapter
 from src.adapters.tts.piper_adapter import PiperTTSAdapter
+from src.profiles.profile_store import ProfileStore
 
 
 def create_default_voice_capability(
     identities_dir: Optional[Path] = None,
+    profiles_dir: Optional[Path] = None,
 ) -> VoiceCapability:
     """Factory creating a ready-to-use VoiceCapability for NAV.
 
-    Pre-registers default adapters (EdgeTTS, PiperTTS) and loads all baseline identities
-    from configs/identities/.
+    Pre-registers default adapters (EdgeTTS, PiperTTS), loads all baseline identities
+    from configs/identities/, and attaches the persistent ProfileStore from data/profiles/.
     """
     identity_reg = IdentityRegistry()
     renderer_reg = RendererRegistry()
@@ -28,16 +30,21 @@ def create_default_voice_capability(
     renderer_reg.register(EdgeTTSAdapter())
     renderer_reg.register(PiperTTSAdapter())
 
-    # Load baseline identities
+    # Load baseline declarative identities
     config_path = identities_dir or (Path(__file__).resolve().parents[3] / "configs" / "identities")
     if config_path.is_dir():
         identities = IdentityLoader.load_directory(config_path)
         for ident in identities:
             identity_reg.register(ident)
 
+    # Attach profile store
+    prof_path = profiles_dir or (Path(__file__).resolve().parents[3] / "data" / "profiles")
+    profile_store = ProfileStore(prof_path)
+
     return VoiceCapability(
         identity_registry=identity_reg,
         renderer_registry=renderer_reg,
+        profile_store=profile_store,
     )
 
 
