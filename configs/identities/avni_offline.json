@@ -1,0 +1,12 @@
+﻿{
+  "identity_id": "avni_offline",
+  "renderer_id": "piper",
+  "voice_configuration": {
+    "model_name": "en_US-lessac-medium"
+  },
+  "provenance": {
+    "version": "v0.5",
+    "persona": "Avni Offline Local Baseline",
+    "created_for": "Local offline synthesis and fallback"
+  }
+}
