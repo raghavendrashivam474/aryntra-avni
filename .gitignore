@@ -1,7 +1,7 @@
-# Python
+﻿# Python
 __pycache__/
 *.py[cod]
-*$py.class
+*.class
 *.so
 *.egg-info/
 *.egg
@@ -28,5 +28,9 @@ Thumbs.db
 artifacts/*.mp3
 artifacts/*.wav
 
+# Model binaries (download on demand)
+models/**/*.onnx
+
 # Evaluation results (auto-generated, re-runnable)
 docs/evaluation/v0_results.md
+docs/evaluation/v0_5_results.md
