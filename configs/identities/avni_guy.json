@@ -1,0 +1,14 @@
+{
+  "identity_id": "avni_guy",
+  "renderer_id": "edge_tts",
+  "voice_configuration": {
+    "voice": "en-US-GuyNeural",
+    "rate": "+0%",
+    "pitch": "+0Hz"
+  },
+  "provenance": {
+    "version": "v0",
+    "persona": "Avni Secondary Male Baseline",
+    "created_for": "Testing identity switching"
+  }
+}

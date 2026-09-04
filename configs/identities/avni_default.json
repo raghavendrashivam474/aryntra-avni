@@ -1,0 +1,14 @@
+{
+  "identity_id": "avni_default",
+  "renderer_id": "edge_tts",
+  "voice_configuration": {
+    "voice": "en-US-AriaNeural",
+    "rate": "+0%",
+    "pitch": "+0Hz"
+  },
+  "provenance": {
+    "version": "v0",
+    "persona": "Avni Default Assistant",
+    "created_for": "NAV V0 Integration"
+  }
+}
