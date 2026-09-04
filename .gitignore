@@ -1,0 +1,32 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg-info/
+*.egg
+dist/
+build/
+.eggs/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Artifacts (generated audio, evaluation outputs)
+artifacts/*.mp3
+artifacts/*.wav
+
+# Evaluation results (auto-generated, re-runnable)
+docs/evaluation/v0_results.md
