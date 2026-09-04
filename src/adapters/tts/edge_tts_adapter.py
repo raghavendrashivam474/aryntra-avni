@@ -1,13 +1,17 @@
-﻿"""Edge-TTS concrete adapter for Avni.
+"""Edge-TTS concrete adapter for Avni.
 
 Translates Avni TTSRenderer calls to Microsoft Edge TTS neural voices.
+Designed for synchronous callers. Uses asyncio.run() internally.
 """
 
 import asyncio
+import logging
 from typing import Any, Dict, Optional
 
 from src.contracts.renderer import TTSRenderer, RenderResult
 from src.contracts.errors import AvniVoiceError, VoiceErrorCode
+
+logger = logging.getLogger(__name__)
 
 
 class EdgeTTSAdapter(TTSRenderer):
@@ -50,6 +54,9 @@ class EdgeTTSAdapter(TTSRenderer):
         rate = voice_config.get("rate", self.DEFAULT_RATE)
         pitch = voice_config.get("pitch", self.DEFAULT_PITCH)
 
+        logger.debug("EdgeTTS render | voice=%s rate=%s pitch=%s text_len=%d",
+                      voice, rate, pitch, len(text))
+
         async def _synthesize() -> bytes:
             communicate = edge_tts.Communicate(text=text, voice=voice, rate=rate, pitch=pitch)
             audio_stream = bytearray()
@@ -59,17 +66,7 @@ class EdgeTTSAdapter(TTSRenderer):
             return bytes(audio_stream)
 
         try:
-            try:
-                loop = asyncio.get_running_loop()
-            except RuntimeError:
-                loop = None
-
-            if loop and loop.is_running():
-                import concurrent.futures
-                with concurrent.futures.ThreadPoolExecutor() as pool:
-                    audio_data = pool.submit(asyncio.run, _synthesize()).result()
-            else:
-                audio_data = asyncio.run(_synthesize())
+            audio_data = asyncio.run(_synthesize())
 
             if not audio_data:
                 raise AvniVoiceError(
@@ -77,6 +74,8 @@ class EdgeTTSAdapter(TTSRenderer):
                     message="edge-tts returned empty audio stream.",
                     details={"voice": voice, "text_len": len(text)},
                 )
+
+            logger.debug("EdgeTTS render complete | bytes=%d", len(audio_data))
 
             return RenderResult(
                 audio_bytes=audio_data,
@@ -95,6 +94,7 @@ class EdgeTTSAdapter(TTSRenderer):
         except AvniVoiceError:
             raise
         except Exception as exc:
+            logger.error("EdgeTTS render failed | voice=%s error=%s", voice, exc)
             raise AvniVoiceError(
                 code=VoiceErrorCode.GENERATION_FAILURE,
                 message=f"edge-tts failed to synthesize: {str(exc)}",

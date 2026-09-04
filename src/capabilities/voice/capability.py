@@ -1,15 +1,18 @@
-﻿"""Voice Capability — main orchestration entry point.
+"""Voice Capability — main orchestration entry point.
 
 Flow:
     validate request  →  resolve identity  →  resolve renderer  →  invoke  →  respond
 """
 
+import logging
 import time
 from typing import Optional
 
 from src.contracts.voice import VoiceRequest, VoiceResponse
 from src.contracts.errors import AvniVoiceError, VoiceErrorCode
 from src.capabilities.voice.registry import IdentityRegistry, RendererRegistry
+
+logger = logging.getLogger(__name__)
 
 
 class VoiceCapability:
@@ -37,6 +40,8 @@ class VoiceCapability:
         5. Wrap the result in a stable VoiceResponse.
         """
         t0 = time.perf_counter()
+        req_label = request.request_id or "anonymous"
+        logger.info("Synthesis started | request=%s identity=%s", req_label, request.identity_id)
 
         # 1 — validate
         request.validate()
@@ -55,8 +60,11 @@ class VoiceCapability:
                 context=request.context,
             )
         except AvniVoiceError:
-            raise  # already a domain error — pass through
+            logger.error("Synthesis failed (domain error) | request=%s", req_label)
+            raise
         except Exception as exc:
+            logger.error("Synthesis failed (engine error) | request=%s renderer=%s error=%s",
+                         req_label, identity.renderer_id, exc)
             raise AvniVoiceError(
                 code=VoiceErrorCode.GENERATION_FAILURE,
                 message=f"Renderer '{identity.renderer_id}' failed: {exc}",
@@ -76,6 +84,9 @@ class VoiceCapability:
             renderer_id=identity.renderer_id,
             generation_latency_sec=round(elapsed, 4),
         )
+
+        logger.info("Synthesis complete | request=%s latency=%.3fs bytes=%d",
+                     req_label, elapsed, len(result.audio_bytes))
 
         return VoiceResponse(
             audio_bytes=result.audio_bytes,
