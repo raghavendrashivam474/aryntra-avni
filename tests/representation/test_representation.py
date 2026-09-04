@@ -44,7 +44,7 @@ class TestVoiceRepresentation(TestCase):
         rep = VoiceRepresentation(
             representation_id="test_v1",
             version="1.0",
-            data=b"\x00" * 40,
+            data=b"\x00" * 64,
         )
         self.assertTrue(rep.is_valid)
 
@@ -60,7 +60,7 @@ class TestVoiceRepresentation(TestCase):
         rep = VoiceRepresentation(
             representation_id="",
             version="1.0",
-            data=b"\x00" * 40,
+            data=b"\x00" * 64,
         )
         self.assertFalse(rep.is_valid)
 
@@ -81,7 +81,7 @@ class TestAcousticFeatureExtractor(TestCase):
 
         self.assertTrue(rep.is_valid)
         self.assertEqual(rep.version, "1.0")
-        self.assertEqual(len(rep.data), 40)  # 5 doubles × 8 bytes
+        self.assertEqual(len(rep.data), 64)  # 8 doubles x 8 bytes
         self.assertIn("features", rep.metadata)
 
     def test_extract_multiple_samples(self):
@@ -128,12 +128,12 @@ class TestAcousticFeatureExtractor(TestCase):
         rep_low = self.extractor.extract([low])
         rep_high = self.extractor.extract([high])
         sim = self.extractor.similarity(rep_low, rep_high)
-        self.assertLess(sim, 1.0)
+        self.assertLess(sim, 0.90)
         self.assertGreaterEqual(sim, 0.0)
 
     def test_similarity_version_mismatch(self):
-        rep_a = VoiceRepresentation("a", "1.0", b"\x00" * 40)
-        rep_b = VoiceRepresentation("b", "2.0", b"\x00" * 40)
+        rep_a = VoiceRepresentation("a", "1.0", b"\x00" * 64)
+        rep_b = VoiceRepresentation("b", "2.0", b"\x00" * 64)
         with self.assertRaises(ExtractionError):
             self.extractor.similarity(rep_a, rep_b)
 
@@ -143,11 +143,7 @@ class TestAcousticFeatureExtractor(TestCase):
         rep = self.extractor.extract([audio])
         feats = rep.metadata["features"]
 
-        # Mean of a sine wave should be near zero
         self.assertAlmostEqual(feats["mean_amplitude"], 0.0, places=2)
-        # RMS of a sine wave ≈ amplitude / sqrt(2)
         self.assertGreater(feats["rms_energy"], 0.0)
-        # ZCR should be positive
         self.assertGreater(feats["zero_crossing_rate"], 0.0)
-        # Spectral centroid should be positive
-        self.assertGreater(feats["spectral_centroid"], 0.0)
+        self.assertGreater(feats["norm_spectral_centroid"], 0.0)

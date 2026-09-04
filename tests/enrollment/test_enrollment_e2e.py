@@ -1,4 +1,4 @@
-﻿"""End-to-end test: Enrollment → Representation extraction."""
+﻿"""End-to-end test: Enrollment -> Representation extraction."""
 
 import math
 import struct
@@ -66,7 +66,7 @@ class TestEnrollmentWithRepresentation(TestCase):
             self.assertTrue(result.is_success)
             self.assertIsNotNone(result.representation_data)
             self.assertEqual(result.representation_version, "1.0")
-            self.assertEqual(len(result.representation_data), 40)
+            self.assertEqual(len(result.representation_data), 64)
             self.assertTrue(result.metadata["extractor_configured"])
             self.assertIn("representation", result.metadata)
 

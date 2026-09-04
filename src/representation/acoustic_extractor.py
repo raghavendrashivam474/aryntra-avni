@@ -1,21 +1,19 @@
-﻿"""Acoustic Feature Extractor — lightweight voice representation.
+﻿"""Acoustic Feature Extractor — lightweight normalized voice representation.
 
-Extracts statistical acoustic features from audio to create a
+Extracts normalized statistical and spectral features from audio to create a
 deterministic, CPU-friendly, dependency-free voice representation.
 
-Features extracted per sample:
-- Mean and standard deviation of signal amplitude
-- Zero-crossing rate
-- RMS energy
-- Spectral centroid (approximate via FFT)
-- Signal duration
+Features extracted per sample (8-dimensional normalized vector):
+1. Mean amplitude [-1.0, 1.0]
+2. Standard deviation of amplitude [0.0, 1.0]
+3. Zero-crossing rate [0.0, 1.0]
+4. RMS energy [0.0, 1.0]
+5. Normalized spectral centroid (relative to Nyquist frequency) [0.0, 1.0]
+6. Low-band spectral energy ratio (0 - 500 Hz) [0.0, 1.0]
+7. Mid-band spectral energy ratio (500 - 2000 Hz) [0.0, 1.0]
+8. High-band spectral energy ratio (2000 - 8000 Hz) [0.0, 1.0]
 
-The final representation is the average across all enrollment samples,
-producing a stable 40-byte feature vector.
-
-This is a V1 foundation representation. Future milestones may replace
-this with neural embeddings (d-vectors, x-vectors) behind the same
-RepresentationExtractor interface.
+All features are normalized in [0.0, 1.0] for balanced distance metrics.
 """
 
 import logging
@@ -35,7 +33,7 @@ logger = logging.getLogger(__name__)
 
 EXTRACTOR_ID = "acoustic_stats"
 EXTRACTOR_VERSION = "1.0"
-FEATURE_DIM = 5  # mean, std, zcr, rms, spectral_centroid
+FEATURE_DIM = 8  # 8 normalized feature dimensions
 
 
 def _read_pcm_frames(audio_bytes: bytes) -> Tuple[List[float], int]:
@@ -54,7 +52,7 @@ def _read_pcm_frames(audio_bytes: bytes) -> Tuple[List[float], int]:
 
 
 def _compute_features(samples: List[float], sample_rate: int) -> List[float]:
-    """Compute acoustic features from normalized float samples."""
+    """Compute normalized acoustic features from float samples."""
     n = len(samples)
     if n == 0:
         raise ExtractionError("Empty audio sample")
@@ -76,23 +74,54 @@ def _compute_features(samples: List[float], sample_rate: int) -> List[float]:
     # 4. RMS energy
     rms = math.sqrt(sum(s ** 2 for s in samples) / n)
 
-    # 5. Spectral centroid (approximate via magnitude-weighted frequency)
-    # Use a simple DFT on a subsample for CPU efficiency
+    # Spectral analysis using subsampled DFT
     chunk_size = min(n, 2048)
     chunk = samples[:chunk_size]
+    nyquist = sample_rate / 2.0
+
     magnitude_sum = 0.0
     weighted_freq_sum = 0.0
+    low_band_energy = 0.0    # 0 - 500 Hz
+    mid_band_energy = 0.0    # 500 - 2000 Hz
+    high_band_energy = 0.0   # 2000 - 8000 Hz
+
     for k in range(chunk_size // 2):
         real = sum(chunk[t] * math.cos(2 * math.pi * k * t / chunk_size) for t in range(chunk_size))
         imag = sum(chunk[t] * math.sin(2 * math.pi * k * t / chunk_size) for t in range(chunk_size))
         mag = math.sqrt(real ** 2 + imag ** 2)
         freq = k * sample_rate / chunk_size
+
         magnitude_sum += mag
         weighted_freq_sum += freq * mag
 
-    spectral_centroid = (weighted_freq_sum / magnitude_sum) if magnitude_sum > 0 else 0.0
+        if freq < 500.0:
+            low_band_energy += mag ** 2
+        elif freq < 2000.0:
+            mid_band_energy += mag ** 2
+        else:
+            high_band_energy += mag ** 2
 
-    return [mean_val, std_val, zcr, rms, spectral_centroid]
+    raw_centroid = (weighted_freq_sum / magnitude_sum) if magnitude_sum > 0 else 0.0
+    norm_centroid = min(1.0, raw_centroid / nyquist) if nyquist > 0 else 0.0
+
+    total_energy = low_band_energy + mid_band_energy + high_band_energy
+    if total_energy > 0:
+        ratio_low = low_band_energy / total_energy
+        ratio_mid = mid_band_energy / total_energy
+        ratio_high = high_band_energy / total_energy
+    else:
+        ratio_low, ratio_mid, ratio_high = 0.33, 0.33, 0.33
+
+    return [
+        mean_val,
+        std_val,
+        zcr,
+        rms,
+        norm_centroid,
+        ratio_low,
+        ratio_mid,
+        ratio_high,
+    ]
 
 
 def _features_to_bytes(features: List[float]) -> bytes:
@@ -107,11 +136,7 @@ def _bytes_to_features(data: bytes) -> List[float]:
 
 
 class AcousticFeatureExtractor(RepresentationExtractor):
-    """Lightweight acoustic-statistics voice representation extractor.
-
-    No external ML dependencies. Pure Python + stdlib.
-    Produces a deterministic, reproducible representation.
-    """
+    """Lightweight normalized acoustic-statistics voice representation extractor."""
 
     @property
     def extractor_id(self) -> str:
@@ -122,33 +147,22 @@ class AcousticFeatureExtractor(RepresentationExtractor):
         return EXTRACTOR_VERSION
 
     def extract(self, audio_samples: List[bytes]) -> VoiceRepresentation:
-        """Extract acoustic features from preprocessed WAV samples."""
+        """Extract normalized acoustic features from preprocessed WAV samples."""
         if not audio_samples:
             raise ExtractionError("No audio samples provided")
 
-        logger.info(
-            "Extracting acoustic features from %d samples", len(audio_samples)
-        )
-
         all_features = []
-        for i, audio in enumerate(audio_samples):
+        for audio in audio_samples:
             samples, rate = _read_pcm_frames(audio)
             features = _compute_features(samples, rate)
             all_features.append(features)
-            logger.debug("Sample %d features: %s", i, [round(f, 6) for f in features])
 
-        # Average features across all samples for stable representation
         avg_features = [
             sum(f[i] for f in all_features) / len(all_features)
             for i in range(FEATURE_DIM)
         ]
 
         rep_bytes = _features_to_bytes(avg_features)
-
-        logger.info(
-            "Representation extracted | dim=%d bytes=%d",
-            FEATURE_DIM, len(rep_bytes),
-        )
 
         return VoiceRepresentation(
             representation_id=f"{EXTRACTOR_ID}_v{EXTRACTOR_VERSION}",
@@ -163,7 +177,10 @@ class AcousticFeatureExtractor(RepresentationExtractor):
                     "std_amplitude": round(avg_features[1], 6),
                     "zero_crossing_rate": round(avg_features[2], 6),
                     "rms_energy": round(avg_features[3], 6),
-                    "spectral_centroid": round(avg_features[4], 2),
+                    "norm_spectral_centroid": round(avg_features[4], 4),
+                    "low_band_ratio": round(avg_features[5], 4),
+                    "mid_band_ratio": round(avg_features[6], 4),
+                    "high_band_ratio": round(avg_features[7], 4),
                 },
             },
         )
@@ -173,7 +190,7 @@ class AcousticFeatureExtractor(RepresentationExtractor):
         rep_a: VoiceRepresentation,
         rep_b: VoiceRepresentation,
     ) -> float:
-        """Cosine similarity between two acoustic feature vectors."""
+        """Cosine similarity between two normalized feature vectors."""
         if rep_a.version != rep_b.version:
             raise ExtractionError(
                 f"Version mismatch: {rep_a.version} vs {rep_b.version}"
