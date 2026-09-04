@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.backends._legacy:_Backend"
+
+[project]
+name = "aryntra-avni"
+version = "0.1.0"
+description = "Aryntra Avni — Controllable Synthetic Identity (Voice Foundation)"
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "Proprietary"}
+
+dependencies = [
+    "edge-tts>=7.2.8",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0",
+]
+
+[tool.setuptools.packages.find]
+include = ["src*"]
