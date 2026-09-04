@@ -1,4 +1,4 @@
-﻿# Python
+# Python
 __pycache__/
 *.py[cod]
 *.class
@@ -28,8 +28,9 @@ Thumbs.db
 artifacts/*.mp3
 artifacts/*.wav
 
-# Model binaries (download on demand)
-models/**/*.onnx
+# Model binaries and downloaded voice configs (keep directory tracked via .gitkeep)
+models/voices/*
+!models/voices/.gitkeep
 
 # Evaluation results (auto-generated, re-runnable)
 docs/evaluation/v0_results.md
