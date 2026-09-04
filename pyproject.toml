@@ -4,8 +4,8 @@ build-backend = "setuptools.backends._legacy:_Backend"
 
 [project]
 name = "aryntra-avni"
-version = "0.5.0"
-description = "Aryntra Avni — Controllable Synthetic Identity (Voice Foundation & Offline Fallback)"
+version = "1.0.0"
+description = "Aryntra Avni — Controllable Synthetic Identity (Voice Identity Primitive & Offline Fallback)"
 readme = "README.md"
 requires-python = ">=3.10"
 license = {text = "Proprietary"}
