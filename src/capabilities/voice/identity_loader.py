@@ -64,10 +64,17 @@ class IdentityLoader:
         voice_cfg = dict(voice_cfg)
         voice_cfg["representation_id"] = profile.representation.representation_id
         voice_cfg["representation_version"] = profile.representation.version
+        # Inject raw representation data bytes for downstream speaker-conditioned neural adapters
+        voice_cfg["representation_data"] = profile.representation.data
+
+        # Explicit routing: If neural representation, route default to SpeechT5
+        resolved_renderer = default_renderer_id
+        if profile.representation.representation_id and "neural_xvector" in profile.representation.representation_id:
+            resolved_renderer = "speecht5"
 
         return VoiceIdentity(
             identity_id=profile.identity_id,
-            renderer_id=default_renderer_id,
+            renderer_id=resolved_renderer,
             voice_configuration=voice_cfg,
             provenance={
                 "profile_schema_version": profile.schema_version,
