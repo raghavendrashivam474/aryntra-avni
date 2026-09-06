@@ -1,0 +1,629 @@
+{
+  "experiment_id": "v2_0_real_speech_validation",
+  "timestamp": "2026-09-06T03:21:02.662575+00:00",
+  "config": {
+    "experiment_id": "v2_0_real_speech_validation",
+    "data_dir": "C:\\Users\\ragha\\Documents\\Anti-grav\\aryntra-avni\\data\\evaluation",
+    "output_dir": "C:\\Users\\ragha\\Documents\\Anti-grav\\aryntra-avni\\data\\evaluation\\output",
+    "speakers": [
+      "speaker_a",
+      "speaker_b"
+    ],
+    "enrollment_count": 2,
+    "evaluation_count": 3,
+    "test_texts": [
+      "The quick brown fox jumps over the lazy dog.",
+      "Hello, my name is Avni and I am testing voice identity.",
+      "Today is a beautiful day for scientific research.",
+      "The temperature outside is seventy two degrees.",
+      "Can you hear the difference between these two voices?"
+    ],
+    "git_commit": "6ffdcbf",
+    "timestamp": "2026-09-06T03:21:02.662575+00:00"
+  },
+  "samples": [
+    {
+      "sample_id": "sample_1",
+      "speaker_id": "speaker_a",
+      "role": "enrollment",
+      "file_path": "C:\\Users\\ragha\\Documents\\Anti-grav\\aryntra-avni\\data\\evaluation\\speaker_a\\enrollment\\sample_1.wav",
+      "audio_hash": "1d4e144b21d64b3d",
+      "duration_seconds": 6.864,
+      "sample_rate": 16000,
+      "channels": 1
+    },
+    {
+      "sample_id": "sample_2",
+      "speaker_id": "speaker_a",
+      "role": "enrollment",
+      "file_path": "C:\\Users\\ragha\\Documents\\Anti-grav\\aryntra-avni\\data\\evaluation\\speaker_a\\enrollment\\sample_2.wav",
+      "audio_hash": "6f0806aa10329ea5",
+      "duration_seconds": 5.376,
+      "sample_rate": 16000,
+      "channels": 1
+    },
+    {
+      "sample_id": "eval_1",
+      "speaker_id": "speaker_a",
+      "role": "evaluation",
+      "file_path": "C:\\Users\\ragha\\Documents\\Anti-grav\\aryntra-avni\\data\\evaluation\\speaker_a\\evaluation\\eval_1.wav",
+      "audio_hash": "759b109d8508f48d",
+      "duration_seconds": 5.376,
+      "sample_rate": 16000,
+      "channels": 1
+    },
+    {
+      "sample_id": "eval_2",
+      "speaker_id": "speaker_a",
+      "role": "evaluation",
+      "file_path": "C:\\Users\\ragha\\Documents\\Anti-grav\\aryntra-avni\\data\\evaluation\\speaker_a\\evaluation\\eval_2.wav",
+      "audio_hash": "0b9efa86c2816236",
+      "duration_seconds": 5.856,
+      "sample_rate": 16000,
+      "channels": 1
+    },
+    {
+      "sample_id": "eval_3",
+      "speaker_id": "speaker_a",
+      "role": "evaluation",
+      "file_path": "C:\\Users\\ragha\\Documents\\Anti-grav\\aryntra-avni\\data\\evaluation\\speaker_a\\evaluation\\eval_3.wav",
+      "audio_hash": "5f692a1d33324d02",
+      "duration_seconds": 6.744,
+      "sample_rate": 16000,
+      "channels": 1
+    },
+    {
+      "sample_id": "sample_1",
+      "speaker_id": "speaker_b",
+      "role": "enrollment",
+      "file_path": "C:\\Users\\ragha\\Documents\\Anti-grav\\aryntra-avni\\data\\evaluation\\speaker_b\\enrollment\\sample_1.wav",
+      "audio_hash": "1d10a749b53810d9",
+      "duration_seconds": 7.488,
+      "sample_rate": 16000,
+      "channels": 1
+    },
+    {
+      "sample_id": "sample_2",
+      "speaker_id": "speaker_b",
+      "role": "enrollment",
+      "file_path": "C:\\Users\\ragha\\Documents\\Anti-grav\\aryntra-avni\\data\\evaluation\\speaker_b\\enrollment\\sample_2.wav",
+      "audio_hash": "065c0c79461adeee",
+      "duration_seconds": 6.48,
+      "sample_rate": 16000,
+      "channels": 1
+    },
+    {
+      "sample_id": "eval_1",
+      "speaker_id": "speaker_b",
+      "role": "evaluation",
+      "file_path": "C:\\Users\\ragha\\Documents\\Anti-grav\\aryntra-avni\\data\\evaluation\\speaker_b\\evaluation\\eval_1.wav",
+      "audio_hash": "b8823270ab4b6a60",
+      "duration_seconds": 6.264,
+      "sample_rate": 16000,
+      "channels": 1
+    },
+    {
+      "sample_id": "eval_2",
+      "speaker_id": "speaker_b",
+      "role": "evaluation",
+      "file_path": "C:\\Users\\ragha\\Documents\\Anti-grav\\aryntra-avni\\data\\evaluation\\speaker_b\\evaluation\\eval_2.wav",
+      "audio_hash": "95578b71742c4c6a",
+      "duration_seconds": 6.024,
+      "sample_rate": 16000,
+      "channels": 1
+    },
+    {
+      "sample_id": "eval_3",
+      "speaker_id": "speaker_b",
+      "role": "evaluation",
+      "file_path": "C:\\Users\\ragha\\Documents\\Anti-grav\\aryntra-avni\\data\\evaluation\\speaker_b\\evaluation\\eval_3.wav",
+      "audio_hash": "fbf90aefad94a07f",
+      "duration_seconds": 6.84,
+      "sample_rate": 16000,
+      "channels": 1
+    }
+  ],
+  "metrics": [
+    {
+      "metric_name": "representation_consistency",
+      "speaker_id": "speaker_a",
+      "eval_sample_idx": 0,
+      "similarity": 0.9933
+    },
+    {
+      "metric_name": "representation_consistency",
+      "speaker_id": "speaker_a",
+      "eval_sample_idx": 1,
+      "similarity": 0.991
+    },
+    {
+      "metric_name": "representation_consistency",
+      "speaker_id": "speaker_a",
+      "eval_sample_idx": 2,
+      "similarity": 0.9928
+    },
+    {
+      "metric_name": "representation_consistency",
+      "speaker_id": "speaker_b",
+      "eval_sample_idx": 0,
+      "similarity": 0.995
+    },
+    {
+      "metric_name": "representation_consistency",
+      "speaker_id": "speaker_b",
+      "eval_sample_idx": 1,
+      "similarity": 0.9965
+    },
+    {
+      "metric_name": "representation_consistency",
+      "speaker_id": "speaker_b",
+      "eval_sample_idx": 2,
+      "similarity": 0.9944
+    },
+    {
+      "metric_name": "cross_speaker_separation",
+      "speaker_a_id": "speaker_a",
+      "speaker_b_id": "speaker_b",
+      "similarity": 0.9582
+    },
+    {
+      "metric_name": "generated_identity_retention",
+      "speaker_id": "speaker_a",
+      "generated_file": "speaker_a_text0.wav",
+      "reference_file": "eval_1.wav",
+      "similarity": 0.9885
+    },
+    {
+      "metric_name": "generated_identity_retention",
+      "speaker_id": "speaker_a",
+      "generated_file": "speaker_a_text0.wav",
+      "reference_file": "eval_2.wav",
+      "similarity": 0.9814
+    },
+    {
+      "metric_name": "generated_identity_retention",
+      "speaker_id": "speaker_a",
+      "generated_file": "speaker_a_text0.wav",
+      "reference_file": "eval_3.wav",
+      "similarity": 0.9853
+    },
+    {
+      "metric_name": "cross_identity_generation",
+      "generated_speaker": "speaker_a",
+      "reference_speaker": "speaker_b",
+      "generated_file": "speaker_a_text0.wav",
+      "similarity": 0.9475
+    },
+    {
+      "metric_name": "cross_identity_generation",
+      "generated_speaker": "speaker_a",
+      "reference_speaker": "speaker_b",
+      "generated_file": "speaker_a_text0.wav",
+      "similarity": 0.9526
+    },
+    {
+      "metric_name": "cross_identity_generation",
+      "generated_speaker": "speaker_a",
+      "reference_speaker": "speaker_b",
+      "generated_file": "speaker_a_text0.wav",
+      "similarity": 0.9471
+    },
+    {
+      "metric_name": "generated_identity_retention",
+      "speaker_id": "speaker_a",
+      "generated_file": "speaker_a_text1.wav",
+      "reference_file": "eval_1.wav",
+      "similarity": 0.9766
+    },
+    {
+      "metric_name": "generated_identity_retention",
+      "speaker_id": "speaker_a",
+      "generated_file": "speaker_a_text1.wav",
+      "reference_file": "eval_2.wav",
+      "similarity": 0.9725
+    },
+    {
+      "metric_name": "generated_identity_retention",
+      "speaker_id": "speaker_a",
+      "generated_file": "speaker_a_text1.wav",
+      "reference_file": "eval_3.wav",
+      "similarity": 0.9759
+    },
+    {
+      "metric_name": "cross_identity_generation",
+      "generated_speaker": "speaker_a",
+      "reference_speaker": "speaker_b",
+      "generated_file": "speaker_a_text1.wav",
+      "similarity": 0.9366
+    },
+    {
+      "metric_name": "cross_identity_generation",
+      "generated_speaker": "speaker_a",
+      "reference_speaker": "speaker_b",
+      "generated_file": "speaker_a_text1.wav",
+      "similarity": 0.9428
+    },
+    {
+      "metric_name": "cross_identity_generation",
+      "generated_speaker": "speaker_a",
+      "reference_speaker": "speaker_b",
+      "generated_file": "speaker_a_text1.wav",
+      "similarity": 0.9351
+    },
+    {
+      "metric_name": "generated_identity_retention",
+      "speaker_id": "speaker_a",
+      "generated_file": "speaker_a_text2.wav",
+      "reference_file": "eval_1.wav",
+      "similarity": 0.9836
+    },
+    {
+      "metric_name": "generated_identity_retention",
+      "speaker_id": "speaker_a",
+      "generated_file": "speaker_a_text2.wav",
+      "reference_file": "eval_2.wav",
+      "similarity": 0.9805
+    },
+    {
+      "metric_name": "generated_identity_retention",
+      "speaker_id": "speaker_a",
+      "generated_file": "speaker_a_text2.wav",
+      "reference_file": "eval_3.wav",
+      "similarity": 0.9802
+    },
+    {
+      "metric_name": "cross_identity_generation",
+      "generated_speaker": "speaker_a",
+      "reference_speaker": "speaker_b",
+      "generated_file": "speaker_a_text2.wav",
+      "similarity": 0.9453
+    },
+    {
+      "metric_name": "cross_identity_generation",
+      "generated_speaker": "speaker_a",
+      "reference_speaker": "speaker_b",
+      "generated_file": "speaker_a_text2.wav",
+      "similarity": 0.9488
+    },
+    {
+      "metric_name": "cross_identity_generation",
+      "generated_speaker": "speaker_a",
+      "reference_speaker": "speaker_b",
+      "generated_file": "speaker_a_text2.wav",
+      "similarity": 0.9449
+    },
+    {
+      "metric_name": "generated_identity_retention",
+      "speaker_id": "speaker_a",
+      "generated_file": "speaker_a_text3.wav",
+      "reference_file": "eval_1.wav",
+      "similarity": 0.9819
+    },
+    {
+      "metric_name": "generated_identity_retention",
+      "speaker_id": "speaker_a",
+      "generated_file": "speaker_a_text3.wav",
+      "reference_file": "eval_2.wav",
+      "similarity": 0.9783
+    },
+    {
+      "metric_name": "generated_identity_retention",
+      "speaker_id": "speaker_a",
+      "generated_file": "speaker_a_text3.wav",
+      "reference_file": "eval_3.wav",
+      "similarity": 0.9816
+    },
+    {
+      "metric_name": "cross_identity_generation",
+      "generated_speaker": "speaker_a",
+      "reference_speaker": "speaker_b",
+      "generated_file": "speaker_a_text3.wav",
+      "similarity": 0.939
+    },
+    {
+      "metric_name": "cross_identity_generation",
+      "generated_speaker": "speaker_a",
+      "reference_speaker": "speaker_b",
+      "generated_file": "speaker_a_text3.wav",
+      "similarity": 0.943
+    },
+    {
+      "metric_name": "cross_identity_generation",
+      "generated_speaker": "speaker_a",
+      "reference_speaker": "speaker_b",
+      "generated_file": "speaker_a_text3.wav",
+      "similarity": 0.9385
+    },
+    {
+      "metric_name": "generated_identity_retention",
+      "speaker_id": "speaker_a",
+      "generated_file": "speaker_a_text4.wav",
+      "reference_file": "eval_1.wav",
+      "similarity": 0.983
+    },
+    {
+      "metric_name": "generated_identity_retention",
+      "speaker_id": "speaker_a",
+      "generated_file": "speaker_a_text4.wav",
+      "reference_file": "eval_2.wav",
+      "similarity": 0.9784
+    },
+    {
+      "metric_name": "generated_identity_retention",
+      "speaker_id": "speaker_a",
+      "generated_file": "speaker_a_text4.wav",
+      "reference_file": "eval_3.wav",
+      "similarity": 0.9813
+    },
+    {
+      "metric_name": "cross_identity_generation",
+      "generated_speaker": "speaker_a",
+      "reference_speaker": "speaker_b",
+      "generated_file": "speaker_a_text4.wav",
+      "similarity": 0.9374
+    },
+    {
+      "metric_name": "cross_identity_generation",
+      "generated_speaker": "speaker_a",
+      "reference_speaker": "speaker_b",
+      "generated_file": "speaker_a_text4.wav",
+      "similarity": 0.9402
+    },
+    {
+      "metric_name": "cross_identity_generation",
+      "generated_speaker": "speaker_a",
+      "reference_speaker": "speaker_b",
+      "generated_file": "speaker_a_text4.wav",
+      "similarity": 0.9378
+    },
+    {
+      "metric_name": "generated_identity_retention",
+      "speaker_id": "speaker_b",
+      "generated_file": "speaker_b_text0.wav",
+      "reference_file": "eval_1.wav",
+      "similarity": 0.9839
+    },
+    {
+      "metric_name": "generated_identity_retention",
+      "speaker_id": "speaker_b",
+      "generated_file": "speaker_b_text0.wav",
+      "reference_file": "eval_2.wav",
+      "similarity": 0.9857
+    },
+    {
+      "metric_name": "generated_identity_retention",
+      "speaker_id": "speaker_b",
+      "generated_file": "speaker_b_text0.wav",
+      "reference_file": "eval_3.wav",
+      "similarity": 0.9819
+    },
+    {
+      "metric_name": "cross_identity_generation",
+      "generated_speaker": "speaker_b",
+      "reference_speaker": "speaker_a",
+      "generated_file": "speaker_b_text0.wav",
+      "similarity": 0.9546
+    },
+    {
+      "metric_name": "cross_identity_generation",
+      "generated_speaker": "speaker_b",
+      "reference_speaker": "speaker_a",
+      "generated_file": "speaker_b_text0.wav",
+      "similarity": 0.9472
+    },
+    {
+      "metric_name": "cross_identity_generation",
+      "generated_speaker": "speaker_b",
+      "reference_speaker": "speaker_a",
+      "generated_file": "speaker_b_text0.wav",
+      "similarity": 0.9534
+    },
+    {
+      "metric_name": "generated_identity_retention",
+      "speaker_id": "speaker_b",
+      "generated_file": "speaker_b_text1.wav",
+      "reference_file": "eval_1.wav",
+      "similarity": 0.9819
+    },
+    {
+      "metric_name": "generated_identity_retention",
+      "speaker_id": "speaker_b",
+      "generated_file": "speaker_b_text1.wav",
+      "reference_file": "eval_2.wav",
+      "similarity": 0.9856
+    },
+    {
+      "metric_name": "generated_identity_retention",
+      "speaker_id": "speaker_b",
+      "generated_file": "speaker_b_text1.wav",
+      "reference_file": "eval_3.wav",
+      "similarity": 0.9812
+    },
+    {
+      "metric_name": "cross_identity_generation",
+      "generated_speaker": "speaker_b",
+      "reference_speaker": "speaker_a",
+      "generated_file": "speaker_b_text1.wav",
+      "similarity": 0.9484
+    },
+    {
+      "metric_name": "cross_identity_generation",
+      "generated_speaker": "speaker_b",
+      "reference_speaker": "speaker_a",
+      "generated_file": "speaker_b_text1.wav",
+      "similarity": 0.945
+    },
+    {
+      "metric_name": "cross_identity_generation",
+      "generated_speaker": "speaker_b",
+      "reference_speaker": "speaker_a",
+      "generated_file": "speaker_b_text1.wav",
+      "similarity": 0.9503
+    },
+    {
+      "metric_name": "generated_identity_retention",
+      "speaker_id": "speaker_b",
+      "generated_file": "speaker_b_text2.wav",
+      "reference_file": "eval_1.wav",
+      "similarity": 0.9829
+    },
+    {
+      "metric_name": "generated_identity_retention",
+      "speaker_id": "speaker_b",
+      "generated_file": "speaker_b_text2.wav",
+      "reference_file": "eval_2.wav",
+      "similarity": 0.9835
+    },
+    {
+      "metric_name": "generated_identity_retention",
+      "speaker_id": "speaker_b",
+      "generated_file": "speaker_b_text2.wav",
+      "reference_file": "eval_3.wav",
+      "similarity": 0.9851
+    },
+    {
+      "metric_name": "cross_identity_generation",
+      "generated_speaker": "speaker_b",
+      "reference_speaker": "speaker_a",
+      "generated_file": "speaker_b_text2.wav",
+      "similarity": 0.9463
+    },
+    {
+      "metric_name": "cross_identity_generation",
+      "generated_speaker": "speaker_b",
+      "reference_speaker": "speaker_a",
+      "generated_file": "speaker_b_text2.wav",
+      "similarity": 0.9421
+    },
+    {
+      "metric_name": "cross_identity_generation",
+      "generated_speaker": "speaker_b",
+      "reference_speaker": "speaker_a",
+      "generated_file": "speaker_b_text2.wav",
+      "similarity": 0.9468
+    },
+    {
+      "metric_name": "generated_identity_retention",
+      "speaker_id": "speaker_b",
+      "generated_file": "speaker_b_text3.wav",
+      "reference_file": "eval_1.wav",
+      "similarity": 0.9831
+    },
+    {
+      "metric_name": "generated_identity_retention",
+      "speaker_id": "speaker_b",
+      "generated_file": "speaker_b_text3.wav",
+      "reference_file": "eval_2.wav",
+      "similarity": 0.9853
+    },
+    {
+      "metric_name": "generated_identity_retention",
+      "speaker_id": "speaker_b",
+      "generated_file": "speaker_b_text3.wav",
+      "reference_file": "eval_3.wav",
+      "similarity": 0.9844
+    },
+    {
+      "metric_name": "cross_identity_generation",
+      "generated_speaker": "speaker_b",
+      "reference_speaker": "speaker_a",
+      "generated_file": "speaker_b_text3.wav",
+      "similarity": 0.9502
+    },
+    {
+      "metric_name": "cross_identity_generation",
+      "generated_speaker": "speaker_b",
+      "reference_speaker": "speaker_a",
+      "generated_file": "speaker_b_text3.wav",
+      "similarity": 0.9445
+    },
+    {
+      "metric_name": "cross_identity_generation",
+      "generated_speaker": "speaker_b",
+      "reference_speaker": "speaker_a",
+      "generated_file": "speaker_b_text3.wav",
+      "similarity": 0.9493
+    },
+    {
+      "metric_name": "generated_identity_retention",
+      "speaker_id": "speaker_b",
+      "generated_file": "speaker_b_text4.wav",
+      "reference_file": "eval_1.wav",
+      "similarity": 0.9805
+    },
+    {
+      "metric_name": "generated_identity_retention",
+      "speaker_id": "speaker_b",
+      "generated_file": "speaker_b_text4.wav",
+      "reference_file": "eval_2.wav",
+      "similarity": 0.98
+    },
+    {
+      "metric_name": "generated_identity_retention",
+      "speaker_id": "speaker_b",
+      "generated_file": "speaker_b_text4.wav",
+      "reference_file": "eval_3.wav",
+      "similarity": 0.982
+    },
+    {
+      "metric_name": "cross_identity_generation",
+      "generated_speaker": "speaker_b",
+      "reference_speaker": "speaker_a",
+      "generated_file": "speaker_b_text4.wav",
+      "similarity": 0.9481
+    },
+    {
+      "metric_name": "cross_identity_generation",
+      "generated_speaker": "speaker_b",
+      "reference_speaker": "speaker_a",
+      "generated_file": "speaker_b_text4.wav",
+      "similarity": 0.9434
+    },
+    {
+      "metric_name": "cross_identity_generation",
+      "generated_speaker": "speaker_b",
+      "reference_speaker": "speaker_a",
+      "generated_file": "speaker_b_text4.wav",
+      "similarity": 0.9502
+    }
+  ],
+  "generated_files": [
+    "C:\\Users\\ragha\\Documents\\Anti-grav\\aryntra-avni\\data\\evaluation\\output\\generated\\speaker_a_text0.wav",
+    "C:\\Users\\ragha\\Documents\\Anti-grav\\aryntra-avni\\data\\evaluation\\output\\generated\\speaker_a_text1.wav",
+    "C:\\Users\\ragha\\Documents\\Anti-grav\\aryntra-avni\\data\\evaluation\\output\\generated\\speaker_a_text2.wav",
+    "C:\\Users\\ragha\\Documents\\Anti-grav\\aryntra-avni\\data\\evaluation\\output\\generated\\speaker_a_text3.wav",
+    "C:\\Users\\ragha\\Documents\\Anti-grav\\aryntra-avni\\data\\evaluation\\output\\generated\\speaker_a_text4.wav",
+    "C:\\Users\\ragha\\Documents\\Anti-grav\\aryntra-avni\\data\\evaluation\\output\\generated\\speaker_b_text0.wav",
+    "C:\\Users\\ragha\\Documents\\Anti-grav\\aryntra-avni\\data\\evaluation\\output\\generated\\speaker_b_text1.wav",
+    "C:\\Users\\ragha\\Documents\\Anti-grav\\aryntra-avni\\data\\evaluation\\output\\generated\\speaker_b_text2.wav",
+    "C:\\Users\\ragha\\Documents\\Anti-grav\\aryntra-avni\\data\\evaluation\\output\\generated\\speaker_b_text3.wav",
+    "C:\\Users\\ragha\\Documents\\Anti-grav\\aryntra-avni\\data\\evaluation\\output\\generated\\speaker_b_text4.wav"
+  ],
+  "errors": [],
+  "summary": {
+    "representation_consistency": {
+      "count": 6,
+      "mean": 0.9938,
+      "min": 0.991,
+      "max": 0.9965
+    },
+    "cross_speaker_separation": {
+      "count": 1,
+      "mean": 0.9582,
+      "min": 0.9582,
+      "max": 0.9582
+    },
+    "generated_identity_retention": {
+      "count": 30,
+      "mean": 0.9819,
+      "min": 0.9725,
+      "max": 0.9885
+    },
+    "cross_identity_generation": {
+      "count": 30,
+      "mean": 0.9452,
+      "min": 0.9351,
+      "max": 0.9546
+    }
+  }
+}

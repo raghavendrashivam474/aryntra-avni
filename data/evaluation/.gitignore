@@ -1,0 +1,5 @@
+﻿# V2.0 evaluation audio — do not commit human recordings
+data/evaluation/speaker_a/
+data/evaluation/speaker_b/
+data/evaluation/output/
+!data/evaluation/.gitkeep
