@@ -1,5 +1,15 @@
-﻿# V2.0 evaluation audio — do not commit human recordings
-data/evaluation/speaker_a/
-data/evaluation/speaker_b/
-data/evaluation/output/
-!data/evaluation/.gitkeep
+﻿# V2.0 evaluation audio and runtime artifacts — do not commit
+# Patterns are relative to this file's location (data/evaluation/)
+
+# Source speaker recordings
+speaker_a/
+speaker_b/
+
+# Runtime artifacts generated during evaluation runs
+output/generated/
+output/profiles/
+output/temp_enrollment/
+
+# Keep the results JSON and gitkeep tracked
+!output/v2_0_real_speech_validation_results.json
+!.gitkeep
