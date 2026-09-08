@@ -1,8 +1,8 @@
-﻿"""In-memory registries for voice identities and TTS renderers."""
+﻿"""In-memory registries for voice identities, TTS renderers, and voice converters."""
 
 from typing import Dict
 from src.contracts.voice import VoiceIdentity
-from src.contracts.renderer import TTSRenderer
+from src.contracts.renderer import TTSRenderer, VoiceConverter
 from src.contracts.errors import AvniVoiceError, VoiceErrorCode
 
 
@@ -52,3 +52,29 @@ class RendererRegistry:
                 details={"renderer_id": renderer_id},
             )
         return renderer
+
+
+class ConverterRegistry:
+    """Stores and retrieves VoiceConverter adapters by converter_id."""
+
+    def __init__(self) -> None:
+        self._converters: Dict[str, VoiceConverter] = {}
+
+    def register(self, converter: VoiceConverter) -> None:
+        self._converters[converter.converter_id] = converter
+
+    def get(self, converter_id: str) -> VoiceConverter:
+        if converter_id not in self._converters:
+            raise AvniVoiceError(
+                code=VoiceErrorCode.RENDERER_UNAVAILABLE,
+                message=f"Voice converter '{converter_id}' is not registered.",
+                details={"converter_id": converter_id},
+            )
+        converter = self._converters[converter_id]
+        if not converter.is_available():
+            raise AvniVoiceError(
+                code=VoiceErrorCode.RENDERER_UNAVAILABLE,
+                message=f"Voice converter '{converter_id}' is registered but currently unavailable.",
+                details={"converter_id": converter_id},
+            )
+        return converter
