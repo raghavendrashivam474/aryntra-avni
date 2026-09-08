@@ -1,0 +1,31 @@
+{
+  "inter_identity_similarity": 0.9832,
+  "exp_a_same_speaker": {
+    "source_duration": 1.5,
+    "output_duration": 1.5,
+    "timing_drift_sec": 0.0,
+    "latency_ms": 23.85
+  },
+  "exp_b_cross_speaker": {
+    "source_duration": 1.8,
+    "output_duration": 1.8,
+    "timing_drift_sec": 0.0,
+    "latency_ms": 2.8
+  },
+  "exp_c_multi_target": {
+    "target_alpha_shift": 0.91,
+    "target_beta_shift": 0.9,
+    "distinct_manifestation": true
+  },
+  "exp_d_persistence": {
+    "reloaded_profile_id": "identity-beta",
+    "successful_conversion": true
+  },
+  "exp_e_dual_manifestation": {
+    "identity_id": "identity-alpha",
+    "tts_rendered": true,
+    "vc_converted": true,
+    "representation_id": "neural_xvector_v1.0",
+    "success": true
+  }
+}
