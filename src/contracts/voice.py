@@ -64,3 +64,38 @@ class VoiceIdentity:
     fallback_voice_configuration: Dict[str, Any] = field(default_factory=dict)
     representation_id: Optional[str] = None
     profile_id: Optional[str] = None
+
+
+# ============================================================
+# V2.5: Voice Conversion Request
+# ============================================================
+# Sibling to VoiceRequest. Used for speech-to-speech conversion.
+# See ADR-0012 for rationale.
+
+@dataclass
+class VoiceConversionRequest:
+    """Request to convert source speech into a target voice identity."""
+    target_identity_id: str
+    source_audio_bytes: bytes
+    source_audio_format: str = "wav"
+    source_sample_rate: int = 16000
+    context: Optional[Dict[str, Any]] = None
+    request_id: Optional[str] = None
+
+    def validate(self) -> None:
+        """Validate the conversion request."""
+        if not self.target_identity_id or not self.target_identity_id.strip():
+            raise AvniVoiceError(
+                code=VoiceErrorCode.INVALID_REQUEST,
+                message="target_identity_id must be a non-empty string.",
+            )
+        if not self.source_audio_bytes or len(self.source_audio_bytes) < 100:
+            raise AvniVoiceError(
+                code=VoiceErrorCode.INVALID_REQUEST,
+                message="source_audio_bytes must contain valid audio data (minimum 100 bytes).",
+            )
+        if self.source_sample_rate < 8000 or self.source_sample_rate > 48000:
+            raise AvniVoiceError(
+                code=VoiceErrorCode.INVALID_REQUEST,
+                message=f"source_sample_rate must be between 8000 and 48000, got {self.source_sample_rate}.",
+            )
