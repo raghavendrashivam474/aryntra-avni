@@ -1,0 +1,38 @@
+{
+  "schema_version": "1.0",
+  "identity_id": "target-aria",
+  "created_at": "2026-09-08T23:14:12.979661+00:00",
+  "representation": {
+    "representation_id": "neural_xvector_aria_v1",
+    "version": "1.0",
+    "data_b64": "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",
+    "metadata": {
+      "extractor": "neural_xvector",
+      "model_source": "speechbrain/spkrec-xvect-voxceleb",
+      "embedding_dim": 512,
+      "sample_count": 2,
+      "norm": 0.9994077971912992
+    }
+  },
+  "consent": {
+    "source_id": "authorized-aria",
+    "status": "ACTIVE",
+    "scope": "voice_synthesis_and_conversion",
+    "granted_at": "2026-09-08T23:14:12.979589+00:00",
+    "revoked_at": null,
+    "terms_version": "1.0",
+    "metadata": {}
+  },
+  "provenance": {
+    "extractor_id": "neural_xvector",
+    "extractor_version": "1.0",
+    "sample_count": 2,
+    "source_sample_hashes": [
+      "hash_aria_1",
+      "hash_aria_2"
+    ],
+    "enrolled_at": "2026-09-08T23:14:12.979628+00:00",
+    "environment_info": {}
+  },
+  "metadata": {}
+}
