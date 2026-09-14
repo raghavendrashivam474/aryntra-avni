@@ -5,7 +5,7 @@ conditioned on real 512-dimensional speaker embedding vectors.
 
 In V3.0 S1, supports request-time ExpressionConfig via context
 propagation, applying post-synthesis pitch, rate, and energy
-modifications without altering the persistent identity embedding.
+modifications using native PyTorch/Torchaudio and SciPy DSP.
 """
 
 import io
@@ -80,8 +80,7 @@ class SpeechT5TTSAdapter(TTSRenderer):
     ) -> Any:
         """Apply expression controls to synthesized float32 audio samples.
 
-        SpeechT5 vocoder output is post-processed via librosa for
-        time-stretch (rate), pitch shift (pitch), and amplitude scaling (energy).
+        Uses torchaudio for pitch-shift and scipy.signal for time-stretch resampling.
         """
         if not context or "expression" not in context:
             return samples
@@ -94,30 +93,36 @@ class SpeechT5TTSAdapter(TTSRenderer):
         if pitch_scale == 1.0 and rate_scale == 1.0 and energy_scale == 1.0:
             return samples
 
-        try:
-            import numpy as np
-            import librosa
-        except ImportError:
-            logger.warning("librosa/numpy not available; skipping expression post-processing")
-            return samples
+        import torch
+        import numpy as np
 
-        y = np.array(samples, dtype=np.float32)
+        # Convert to 1D torch float tensor
+        y = torch.as_tensor(samples, dtype=torch.float32)
 
-        # Rate (time stretch)
-        if rate_scale != 1.0:
-            y = librosa.effects.time_stretch(y=y, rate=rate_scale)
+        # 1. Rate (time-stretch / speed modulation via scipy resample)
+        if rate_scale != 1.0 and len(y) > 0:
+            import scipy.signal
+            target_length = int(round(len(y) / float(rate_scale)))
+            if target_length > 0:
+                y_np = scipy.signal.resample(y.numpy(), target_length)
+                y = torch.from_numpy(y_np).to(torch.float32)
 
-        # Pitch shift
-        if pitch_scale != 1.0:
-            n_steps = 12.0 * math.log2(pitch_scale)
-            y = librosa.effects.pitch_shift(y=y, sr=sample_rate, n_steps=n_steps)
+        # 2. Pitch shift (via torchaudio.functional.pitch_shift)
+        if pitch_scale != 1.0 and len(y) > 0:
+            try:
+                import torchaudio.functional as F
+                n_steps = 12.0 * math.log2(pitch_scale)
+                # pitch_shift expects shape [..., time]
+                y = F.pitch_shift(y.unsqueeze(0), sample_rate=sample_rate, n_steps=n_steps).squeeze(0)
+            except Exception as e:
+                logger.warning("Torchaudio pitch shift failed, fallback: %s", e)
 
-        # Energy (amplitude scaling)
-        if energy_scale != 1.0:
-            y = y * energy_scale
-            y = np.clip(y, -1.0, 1.0)
+        # 3. Energy (amplitude scale)
+        if energy_scale != 1.0 and len(y) > 0:
+            y = y * float(energy_scale)
+            y = torch.clamp(y, -1.0, 1.0)
 
-        return y
+        return y.numpy()
 
     def render(
         self,
