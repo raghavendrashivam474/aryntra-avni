@@ -114,3 +114,10 @@ S1 Engineering Checklist
  Contract Extension: Introduce an optional ExpressionConfig schema to VoiceRequest without altering current required parameters.
  Adapter Integration: Expose pitch, speed, and volume multipliers inside SpeechT5TTSAdapter and EdgeTTSAdapter using underlying runtime features.
  Acoustic Profiling: Implement the S0 autocorrelation and temporal evaluation code as a standardized, runnable test suite feature.
+
+## V3.0 S2 — Real Identity & Expression Validation (Complete)
+- **Primary Research Question**: Does Avni preserve a persistent synthetic identity while expression varies, when evaluated using real authorized human speech?
+- **Result**: CONFIRMED (Average Identity Cosine Similarity = 0.934 across 16 extreme expressive conditions).
+- **Operating Envelope**: Established Safe (P: [0.75, 1.20], R: [0.85, 1.15], E: [0.50, 1.00]), Degraded, and Unsafe regions.
+- **Architectural Finding**: Recorded in **ADR-0013** (Unified Voice Conversion expression application & decoupled DSP roadmap).
+- **Report**: Available at experiments/v3_0_identity_control/reports/v3_0_s2_research_report.md.
