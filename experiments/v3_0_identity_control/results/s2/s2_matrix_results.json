@@ -1,0 +1,348 @@
+{
+  "project": "Aryntra Avni V3.0 S2 Real Identity Evaluation",
+  "source_speaker": "SPK_B_AUTH",
+  "target_identity": "SPK_A_AUTH",
+  "source_baseline": {
+    "f0_hz": 177.78,
+    "rms": 0.0755,
+    "duration_sec": 6.26
+  },
+  "runs": [
+    {
+      "condition": "neutral",
+      "parameters": {
+        "name": "neutral",
+        "pitch": 1.0,
+        "rate": 1.0,
+        "energy": 1.0
+      },
+      "metrics": {
+        "identity_similarity": 0.9545,
+        "measured_f0_hz": 125.0,
+        "measured_rms": 0.0932,
+        "measured_duration_sec": 5.89,
+        "f0_shift_ratio": 0.703,
+        "duration_ratio": 0.94,
+        "energy_ratio": 1.234,
+        "clipping_detected": false,
+        "audio_file": "C:/Users/ragha/Documents/Anti-grav/aryntra-avni/experiments/v3_0_identity_control/results/s2/output_s2_neutral.wav"
+      },
+      "status": "SUCCESS"
+    },
+    {
+      "condition": "pitch_low_extreme",
+      "parameters": {
+        "name": "pitch_low_extreme",
+        "pitch": 0.5,
+        "rate": 1.0,
+        "energy": 1.0
+      },
+      "metrics": {
+        "identity_similarity": 0.9112,
+        "measured_f0_hz": 82.05,
+        "measured_rms": 0.0685,
+        "measured_duration_sec": 5.95,
+        "f0_shift_ratio": 0.462,
+        "duration_ratio": 0.95,
+        "energy_ratio": 0.907,
+        "clipping_detected": false,
+        "audio_file": "C:/Users/ragha/Documents/Anti-grav/aryntra-avni/experiments/v3_0_identity_control/results/s2/output_s2_pitch_low_extreme.wav"
+      },
+      "status": "SUCCESS"
+    },
+    {
+      "condition": "pitch_low",
+      "parameters": {
+        "name": "pitch_low",
+        "pitch": 0.75,
+        "rate": 1.0,
+        "energy": 1.0
+      },
+      "metrics": {
+        "identity_similarity": 0.926,
+        "measured_f0_hz": 109.22,
+        "measured_rms": 0.0624,
+        "measured_duration_sec": 5.89,
+        "f0_shift_ratio": 0.614,
+        "duration_ratio": 0.94,
+        "energy_ratio": 0.827,
+        "clipping_detected": false,
+        "audio_file": "C:/Users/ragha/Documents/Anti-grav/aryntra-avni/experiments/v3_0_identity_control/results/s2/output_s2_pitch_low.wav"
+      },
+      "status": "SUCCESS"
+    },
+    {
+      "condition": "pitch_high",
+      "parameters": {
+        "name": "pitch_high",
+        "pitch": 1.35,
+        "rate": 1.0,
+        "energy": 1.0
+      },
+      "metrics": {
+        "identity_similarity": 0.8996,
+        "measured_f0_hz": 173.91,
+        "measured_rms": 0.063,
+        "measured_duration_sec": 5.92,
+        "f0_shift_ratio": 0.978,
+        "duration_ratio": 0.945,
+        "energy_ratio": 0.834,
+        "clipping_detected": false,
+        "audio_file": "C:/Users/ragha/Documents/Anti-grav/aryntra-avni/experiments/v3_0_identity_control/results/s2/output_s2_pitch_high.wav"
+      },
+      "status": "SUCCESS"
+    },
+    {
+      "condition": "pitch_high_extreme",
+      "parameters": {
+        "name": "pitch_high_extreme",
+        "pitch": 1.8,
+        "rate": 1.0,
+        "energy": 1.0
+      },
+      "metrics": {
+        "identity_similarity": 0.9147,
+        "measured_f0_hz": 222.22,
+        "measured_rms": 0.064,
+        "measured_duration_sec": 5.89,
+        "f0_shift_ratio": 1.25,
+        "duration_ratio": 0.94,
+        "energy_ratio": 0.847,
+        "clipping_detected": false,
+        "audio_file": "C:/Users/ragha/Documents/Anti-grav/aryntra-avni/experiments/v3_0_identity_control/results/s2/output_s2_pitch_high_extreme.wav"
+      },
+      "status": "SUCCESS"
+    },
+    {
+      "condition": "rate_slow_extreme",
+      "parameters": {
+        "name": "rate_slow_extreme",
+        "pitch": 1.0,
+        "rate": 0.5,
+        "energy": 1.0
+      },
+      "metrics": {
+        "identity_similarity": 0.9227,
+        "measured_f0_hz": 74.07,
+        "measured_rms": 0.094,
+        "measured_duration_sec": 11.84,
+        "f0_shift_ratio": 0.417,
+        "duration_ratio": 1.89,
+        "energy_ratio": 1.246,
+        "clipping_detected": false,
+        "audio_file": "C:/Users/ragha/Documents/Anti-grav/aryntra-avni/experiments/v3_0_identity_control/results/s2/output_s2_rate_slow_extreme.wav"
+      },
+      "status": "SUCCESS"
+    },
+    {
+      "condition": "rate_slow",
+      "parameters": {
+        "name": "rate_slow",
+        "pitch": 1.0,
+        "rate": 0.75,
+        "energy": 1.0
+      },
+      "metrics": {
+        "identity_similarity": 0.9273,
+        "measured_f0_hz": 96.97,
+        "measured_rms": 0.0928,
+        "measured_duration_sec": 7.94,
+        "f0_shift_ratio": 0.545,
+        "duration_ratio": 1.267,
+        "energy_ratio": 1.23,
+        "clipping_detected": false,
+        "audio_file": "C:/Users/ragha/Documents/Anti-grav/aryntra-avni/experiments/v3_0_identity_control/results/s2/output_s2_rate_slow.wav"
+      },
+      "status": "SUCCESS"
+    },
+    {
+      "condition": "rate_fast",
+      "parameters": {
+        "name": "rate_fast",
+        "pitch": 1.0,
+        "rate": 1.35,
+        "energy": 1.0
+      },
+      "metrics": {
+        "identity_similarity": 0.8939,
+        "measured_f0_hz": 179.78,
+        "measured_rms": 0.0949,
+        "measured_duration_sec": 4.34,
+        "f0_shift_ratio": 1.011,
+        "duration_ratio": 0.692,
+        "energy_ratio": 1.256,
+        "clipping_detected": false,
+        "audio_file": "C:/Users/ragha/Documents/Anti-grav/aryntra-avni/experiments/v3_0_identity_control/results/s2/output_s2_rate_fast.wav"
+      },
+      "status": "SUCCESS"
+    },
+    {
+      "condition": "rate_fast_extreme",
+      "parameters": {
+        "name": "rate_fast_extreme",
+        "pitch": 1.0,
+        "rate": 1.8,
+        "energy": 1.0
+      },
+      "metrics": {
+        "identity_similarity": 0.9039,
+        "measured_f0_hz": 242.42,
+        "measured_rms": 0.0913,
+        "measured_duration_sec": 3.29,
+        "f0_shift_ratio": 1.364,
+        "duration_ratio": 0.525,
+        "energy_ratio": 1.21,
+        "clipping_detected": false,
+        "audio_file": "C:/Users/ragha/Documents/Anti-grav/aryntra-avni/experiments/v3_0_identity_control/results/s2/output_s2_rate_fast_extreme.wav"
+      },
+      "status": "SUCCESS"
+    },
+    {
+      "condition": "energy_low_extreme",
+      "parameters": {
+        "name": "energy_low_extreme",
+        "pitch": 1.0,
+        "rate": 1.0,
+        "energy": 0.5
+      },
+      "metrics": {
+        "identity_similarity": 0.9507,
+        "measured_f0_hz": 131.15,
+        "measured_rms": 0.0464,
+        "measured_duration_sec": 5.89,
+        "f0_shift_ratio": 0.738,
+        "duration_ratio": 0.94,
+        "energy_ratio": 0.614,
+        "clipping_detected": false,
+        "audio_file": "C:/Users/ragha/Documents/Anti-grav/aryntra-avni/experiments/v3_0_identity_control/results/s2/output_s2_energy_low_extreme.wav"
+      },
+      "status": "SUCCESS"
+    },
+    {
+      "condition": "energy_low",
+      "parameters": {
+        "name": "energy_low",
+        "pitch": 1.0,
+        "rate": 1.0,
+        "energy": 0.75
+      },
+      "metrics": {
+        "identity_similarity": 0.9533,
+        "measured_f0_hz": 133.33,
+        "measured_rms": 0.0711,
+        "measured_duration_sec": 5.86,
+        "f0_shift_ratio": 0.75,
+        "duration_ratio": 0.935,
+        "energy_ratio": 0.942,
+        "clipping_detected": false,
+        "audio_file": "C:/Users/ragha/Documents/Anti-grav/aryntra-avni/experiments/v3_0_identity_control/results/s2/output_s2_energy_low.wav"
+      },
+      "status": "SUCCESS"
+    },
+    {
+      "condition": "energy_high",
+      "parameters": {
+        "name": "energy_high",
+        "pitch": 1.0,
+        "rate": 1.0,
+        "energy": 1.35
+      },
+      "metrics": {
+        "identity_similarity": 0.9554,
+        "measured_f0_hz": 128.0,
+        "measured_rms": 0.1296,
+        "measured_duration_sec": 5.95,
+        "f0_shift_ratio": 0.72,
+        "duration_ratio": 0.95,
+        "energy_ratio": 1.717,
+        "clipping_detected": true,
+        "audio_file": "C:/Users/ragha/Documents/Anti-grav/aryntra-avni/experiments/v3_0_identity_control/results/s2/output_s2_energy_high.wav"
+      },
+      "status": "SUCCESS"
+    },
+    {
+      "condition": "energy_high_extreme",
+      "parameters": {
+        "name": "energy_high_extreme",
+        "pitch": 1.0,
+        "rate": 1.0,
+        "energy": 1.8
+      },
+      "metrics": {
+        "identity_similarity": 0.954,
+        "measured_f0_hz": 131.15,
+        "measured_rms": 0.1678,
+        "measured_duration_sec": 5.89,
+        "f0_shift_ratio": 0.738,
+        "duration_ratio": 0.94,
+        "energy_ratio": 2.223,
+        "clipping_detected": true,
+        "audio_file": "C:/Users/ragha/Documents/Anti-grav/aryntra-avni/experiments/v3_0_identity_control/results/s2/output_s2_energy_high_extreme.wav"
+      },
+      "status": "SUCCESS"
+    },
+    {
+      "condition": "combined_slow_low",
+      "parameters": {
+        "name": "combined_slow_low",
+        "pitch": 0.75,
+        "rate": 0.75,
+        "energy": 0.8
+      },
+      "metrics": {
+        "identity_similarity": 0.92,
+        "measured_f0_hz": 87.43,
+        "measured_rms": 0.0503,
+        "measured_duration_sec": 7.89,
+        "f0_shift_ratio": 0.492,
+        "duration_ratio": 1.26,
+        "energy_ratio": 0.666,
+        "clipping_detected": false,
+        "audio_file": "C:/Users/ragha/Documents/Anti-grav/aryntra-avni/experiments/v3_0_identity_control/results/s2/output_s2_combined_slow_low.wav"
+      },
+      "status": "SUCCESS"
+    },
+    {
+      "condition": "combined_fast_high",
+      "parameters": {
+        "name": "combined_fast_high",
+        "pitch": 1.35,
+        "rate": 1.35,
+        "energy": 1.2
+      },
+      "metrics": {
+        "identity_similarity": 0.9177,
+        "measured_f0_hz": 200.0,
+        "measured_rms": 0.0738,
+        "measured_duration_sec": 4.46,
+        "f0_shift_ratio": 1.125,
+        "duration_ratio": 0.711,
+        "energy_ratio": 0.978,
+        "clipping_detected": false,
+        "audio_file": "C:/Users/ragha/Documents/Anti-grav/aryntra-avni/experiments/v3_0_identity_control/results/s2/output_s2_combined_fast_high.wav"
+      },
+      "status": "SUCCESS"
+    },
+    {
+      "condition": "combined_extreme_mix",
+      "parameters": {
+        "name": "combined_extreme_mix",
+        "pitch": 1.5,
+        "rate": 0.6,
+        "energy": 1.4
+      },
+      "metrics": {
+        "identity_similarity": 0.9474,
+        "measured_f0_hz": 126.98,
+        "measured_rms": 0.0856,
+        "measured_duration_sec": 9.81,
+        "f0_shift_ratio": 0.714,
+        "duration_ratio": 1.567,
+        "energy_ratio": 1.134,
+        "clipping_detected": false,
+        "audio_file": "C:/Users/ragha/Documents/Anti-grav/aryntra-avni/experiments/v3_0_identity_control/results/s2/output_s2_combined_extreme_mix.wav"
+      },
+      "status": "SUCCESS"
+    }
+  ]
+}
