@@ -6,6 +6,7 @@ interacts with. They must remain stable across renderer changes.
 
 from dataclasses import dataclass, field
 from typing import Any, Dict, Optional
+from src.contracts.expression import ExpressionConfig, NEUTRAL_EXPRESSION
 
 
 @dataclass(frozen=True)
@@ -17,6 +18,7 @@ class VoiceRequest:
     request_id: Optional[str] = None
     context: Dict[str, Any] = field(default_factory=dict)
     streaming: bool = False
+    expression: ExpressionConfig = field(default_factory=lambda: NEUTRAL_EXPRESSION)
 
     def validate(self) -> None:
         """Raises AvniVoiceError(INVALID_REQUEST) if invariants are violated."""

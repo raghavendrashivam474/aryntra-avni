@@ -1,11 +1,16 @@
-﻿"""SpeechT5 concrete adapter for Avni.
+﻿"""SpeechT5 Text-to-Speech Adapter (V1.5 & V3.0 S1).
 
-Translates Avni TTSRenderer calls to Microsoft SpeechT5 conditioned neural voices.
-Runs offline or locally on CPU/GPU using transformers.
+Manifests persistent Voice Identity profiles into speech audio
+conditioned on real 512-dimensional speaker embedding vectors.
+
+In V3.0 S1, supports request-time ExpressionConfig via context
+propagation, applying post-synthesis pitch, rate, and energy
+modifications without altering the persistent identity embedding.
 """
 
 import io
 import logging
+import math
 import struct
 import wave
 from typing import Any, Dict, Optional
@@ -17,7 +22,7 @@ logger = logging.getLogger(__name__)
 
 
 class SpeechT5TTSAdapter(TTSRenderer):
-    """Adapter for runtime speaker-conditioned SpeechT5 text-to-speech."""
+    """SpeechT5 neural TTS renderer with speaker embedding conditioning."""
 
     def __init__(
         self,
@@ -67,6 +72,53 @@ class SpeechT5TTSAdapter(TTSRenderer):
                 cause=exc,
             ) from exc
 
+    def _apply_expression(
+        self,
+        samples: Any,
+        sample_rate: int,
+        context: Optional[Dict[str, Any]],
+    ) -> Any:
+        """Apply expression controls to synthesized float32 audio samples.
+
+        SpeechT5 vocoder output is post-processed via librosa for
+        time-stretch (rate), pitch shift (pitch), and amplitude scaling (energy).
+        """
+        if not context or "expression" not in context:
+            return samples
+
+        expr = context["expression"]
+        pitch_scale = expr.get("pitch_scale", 1.0)
+        rate_scale = expr.get("rate_scale", 1.0)
+        energy_scale = expr.get("energy_scale", 1.0)
+
+        if pitch_scale == 1.0 and rate_scale == 1.0 and energy_scale == 1.0:
+            return samples
+
+        try:
+            import numpy as np
+            import librosa
+        except ImportError:
+            logger.warning("librosa/numpy not available; skipping expression post-processing")
+            return samples
+
+        y = np.array(samples, dtype=np.float32)
+
+        # Rate (time stretch)
+        if rate_scale != 1.0:
+            y = librosa.effects.time_stretch(y=y, rate=rate_scale)
+
+        # Pitch shift
+        if pitch_scale != 1.0:
+            n_steps = 12.0 * math.log2(pitch_scale)
+            y = librosa.effects.pitch_shift(y=y, sr=sample_rate, n_steps=n_steps)
+
+        # Energy (amplitude scaling)
+        if energy_scale != 1.0:
+            y = y * energy_scale
+            y = np.clip(y, -1.0, 1.0)
+
+        return y
+
     def render(
         self,
         text: str,
@@ -82,6 +134,7 @@ class SpeechT5TTSAdapter(TTSRenderer):
         self._load_components()
 
         import torch
+        import numpy as np
 
         # 1. Resolve speaker embedding/representation vector
         rep_data = voice_config.get("representation_data")
@@ -123,36 +176,43 @@ class SpeechT5TTSAdapter(TTSRenderer):
                     spk_emb,
                     vocoder=self._vocoder,
                 )
-                speech_tensor = speech_tensor.cpu().numpy()
+                speech_samples = speech_tensor.cpu().numpy()
 
-            # 3. Serialize generated raw float32 samples to 16-bit PCM WAV bytes (16000Hz)
+            # 3. Apply S1 expression control via context if requested
+            sample_rate = 16000
+            speech_samples = self._apply_expression(speech_samples, sample_rate, context)
+
+            # 4. Serialize generated raw float32 samples to 16-bit PCM WAV bytes (16000Hz)
             wav_buf = io.BytesIO()
-            n_frames = len(speech_tensor)
+            n_frames = len(speech_samples)
             scaled_samples = []
-            for sample in speech_tensor:
+            for sample in speech_samples:
                 clamped = max(-1.0, min(1.0, float(sample)))
                 scaled_samples.append(int(clamped * 32767))
 
             with wave.open(wav_buf, "wb") as wf:
                 wf.setnchannels(1)
                 wf.setsampwidth(2)
-                wf.setframerate(16000)
+                wf.setframerate(sample_rate)
                 wf.writeframes(struct.pack(f"<{n_frames}h", *scaled_samples))
 
             wav_bytes = wav_buf.getvalue()
 
-            logger.debug("SpeechT5 synthesis complete | bytes=%d duration=%.2f sec",
-                         len(wav_bytes), n_frames / 16000)
+            logger.debug(
+                "SpeechT5 synthesis complete | bytes=%d duration=%.2f sec",
+                len(wav_bytes),
+                n_frames / sample_rate,
+            )
 
             return RenderResult(
                 audio_bytes=wav_bytes,
                 audio_format="wav",
-                sample_rate=16000,
-                duration_seconds=float(n_frames / 16000),
+                sample_rate=sample_rate,
+                duration_seconds=float(n_frames / sample_rate),
                 metadata={
                     "engine": "speecht5",
                     "embedding_dim": len(embedding_vector),
-                    "sample_rate": 16000,
+                    "sample_rate": sample_rate,
                     "bytes_count": len(wav_bytes),
                 },
             )

@@ -54,11 +54,37 @@ class EdgeTTSAdapter(TTSRenderer):
         rate = voice_config.get("rate", self.DEFAULT_RATE)
         pitch = voice_config.get("pitch", self.DEFAULT_PITCH)
 
+        # S1: Expression control overrides from context
+        # ExpressionConfig travels via context dict (see capability._merge_expression_context)
+        if context and "expression" in context:
+            expr = context["expression"]
+            pitch_scale = expr.get("pitch_scale", 1.0)
+            rate_scale = expr.get("rate_scale", 1.0)
+            energy_scale = expr.get("energy_scale", 1.0)
+
+            # Edge-TTS expects pitch/rate as percentage strings like "+10%" or "-5%"
+            if pitch_scale != 1.0:
+                pct = round((pitch_scale - 1.0) * 100)
+                pitch = f"+{pct}%" if pct >= 0 else f"{pct}%"
+
+            if rate_scale != 1.0:
+                pct = round((rate_scale - 1.0) * 100)
+                rate = f"+{pct}%" if pct >= 0 else f"{pct}%"
+
+            # Edge-TTS Communicate supports volume parameter
+            # We store it for use in the Communicate call below
+            volume_override = None
+            if energy_scale != 1.0:
+                pct = round((energy_scale - 1.0) * 100)
+                volume_override = f"+{pct}%" if pct >= 0 else f"{pct}%"
+        else:
+            volume_override = None
+
         logger.debug("EdgeTTS render | voice=%s rate=%s pitch=%s text_len=%d",
                       voice, rate, pitch, len(text))
 
         async def _synthesize() -> bytes:
-            communicate = edge_tts.Communicate(text=text, voice=voice, rate=rate, pitch=pitch)
+            communicate = edge_tts.Communicate(text=text, voice=voice, rate=rate, pitch=pitch, volume=volume_override) if volume_override else edge_tts.Communicate(text=text, voice=voice, rate=rate, pitch=pitch)
             audio_stream = bytearray()
             async for chunk in communicate.stream():
                 if chunk["type"] == "audio":

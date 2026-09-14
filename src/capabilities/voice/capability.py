@@ -6,7 +6,7 @@ Flow:
 
 import logging
 import time
-from typing import Optional
+from typing import Any, Dict, Optional
 
 from src.contracts.voice import VoiceRequest, VoiceResponse, VoiceIdentity, VoiceConversionRequest
 from src.contracts.errors import AvniVoiceError, VoiceErrorCode
@@ -51,6 +51,31 @@ class VoiceCapability:
             message=f"Voice identity '{identity_id}' is not registered or found in profile store.",
             details={"identity_id": identity_id},
         )
+
+
+    @staticmethod
+    def _merge_expression_context(
+        request_context: Optional[dict],
+        expression: Any,
+    ) -> Optional[dict]:
+        """Merge ExpressionConfig into the renderer context dict.
+
+        Safe against None, non-ExpressionConfig objects, and neutral configs.
+        """
+        if expression is None:
+            return request_context
+
+        # If it has is_neutral property and is neutral, passthrough
+        if getattr(expression, "is_neutral", False):
+            return request_context
+
+        merged = dict(request_context) if request_context else {}
+        merged["expression"] = {
+            "pitch_scale": getattr(expression, "pitch_scale", 1.0),
+            "rate_scale": getattr(expression, "rate_scale", 1.0),
+            "energy_scale": getattr(expression, "energy_scale", 1.0),
+        }
+        return merged
 
     def _render_with_renderer(
         self,
@@ -132,7 +157,7 @@ class VoiceCapability:
                 renderer=primary_renderer,
                 text=request.text,
                 voice_config=identity.voice_configuration,
-                context=request.context,
+                context=self._merge_expression_context(request.context, getattr(request, "expression", None)),
                 identity_id=identity.identity_id,
             )
         except Exception as exc:
@@ -155,7 +180,7 @@ class VoiceCapability:
                         renderer=fallback_renderer,
                         text=request.text,
                         voice_config=identity.fallback_voice_configuration,
-                        context=request.context,
+                        context=self._merge_expression_context(request.context, getattr(request, "expression", None)),
                         identity_id=identity.identity_id,
                     )
                     actual_renderer_id = identity.fallback_renderer_id
