@@ -1,0 +1,67 @@
+{
+  "experiment": "v3_0_s0_disentanglement_spike",
+  "target_profile": "speaker_a",
+  "status": "success",
+  "results": [
+    {
+      "condition": "condition_1_source_b_eval_1",
+      "source_file": "eval_1.wav",
+      "output_file": "output_converted_condition_1_source_b_eval_1.wav",
+      "target_identity_similarity": 0.9517,
+      "source_metrics": {
+        "duration_sec": 6.264,
+        "pitch_mean_hz": 226.11,
+        "pitch_std_hz": 87.87,
+        "pitch_max_hz": 400.0,
+        "rms_energy": 0.0755
+      },
+      "converted_metrics": {
+        "duration_sec": 5.856,
+        "pitch_mean_hz": 155.57,
+        "pitch_std_hz": 86.07,
+        "pitch_max_hz": 400.0,
+        "rms_energy": 0.0908
+      }
+    },
+    {
+      "condition": "condition_2_source_b_eval_2",
+      "source_file": "eval_2.wav",
+      "output_file": "output_converted_condition_2_source_b_eval_2.wav",
+      "target_identity_similarity": 0.9552,
+      "source_metrics": {
+        "duration_sec": 6.024,
+        "pitch_mean_hz": 216.84,
+        "pitch_std_hz": 90.08,
+        "pitch_max_hz": 400.0,
+        "rms_energy": 0.0804
+      },
+      "converted_metrics": {
+        "duration_sec": 5.696,
+        "pitch_mean_hz": 143.03,
+        "pitch_std_hz": 73.31,
+        "pitch_max_hz": 400.0,
+        "rms_energy": 0.0812
+      }
+    },
+    {
+      "condition": "condition_3_source_b_eval_3",
+      "source_file": "eval_3.wav",
+      "output_file": "output_converted_condition_3_source_b_eval_3.wav",
+      "target_identity_similarity": 0.9554,
+      "source_metrics": {
+        "duration_sec": 6.84,
+        "pitch_mean_hz": 229.4,
+        "pitch_std_hz": 89.31,
+        "pitch_max_hz": 400.0,
+        "rms_energy": 0.0849
+      },
+      "converted_metrics": {
+        "duration_sec": 6.848,
+        "pitch_mean_hz": 141.64,
+        "pitch_std_hz": 64.17,
+        "pitch_max_hz": 400.0,
+        "rms_energy": 0.0656
+      }
+    }
+  ]
+}
