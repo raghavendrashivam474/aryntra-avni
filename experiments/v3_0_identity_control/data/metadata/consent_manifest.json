@@ -1,0 +1,65 @@
+{
+  "schema_version": "1.0",
+  "project": "Aryntra Avni V3.0 S2 Real Identity & Expression Evaluation",
+  "evaluation_purpose": "Operating envelope characterization of synthetic identity retention under acoustic expression modulation",
+  "enrolled_speakers": [
+    {
+      "speaker_id": "SPK_A_AUTH",
+      "name_pseudonym": "Authorized Alpha",
+      "consent_reference_id": "CONSENT-V3-SPK-A",
+      "provenance_notes": "Real authorized human voice sample for synthetic target identity derivation.",
+      "intended_role": "identity_enrollment",
+      "files": [
+        {
+          "file_id": "spk_a_enroll_1.wav",
+          "file_path": "experiments/v3_0_identity_control/data/authorized/spk_a_enroll_1.wav",
+          "sha256": "1d4e144b21d64b3de409d8f362089b95a824c878d686db4760cc26bb49cc1a8e",
+          "sample_rate_hz": 16000,
+          "channels": 1,
+          "duration_seconds": 6.864
+        },
+        {
+          "file_id": "spk_a_enroll_2.wav",
+          "file_path": "experiments/v3_0_identity_control/data/authorized/spk_a_enroll_2.wav",
+          "sha256": "6f0806aa10329ea532a3a5a34db716b2a3f1ecd8116347a4aac6d6b473d8b089",
+          "sample_rate_hz": 16000,
+          "channels": 1,
+          "duration_seconds": 5.376
+        }
+      ]
+    },
+    {
+      "speaker_id": "SPK_B_AUTH",
+      "name_pseudonym": "Authorized Beta",
+      "consent_reference_id": "CONSENT-V3-SPK-B",
+      "provenance_notes": "Real authorized human voice sample for source performance and speech content manifestation.",
+      "intended_role": "source_performance",
+      "files": [
+        {
+          "file_id": "spk_b_perf_1.wav",
+          "file_path": "experiments/v3_0_identity_control/data/authorized/spk_b_perf_1.wav",
+          "sha256": "b8823270ab4b6a60fcd5c35cd4af2a809963e1beb6a8e516f46c1cc6fff60300",
+          "sample_rate_hz": 16000,
+          "channels": 1,
+          "duration_seconds": 6.264
+        },
+        {
+          "file_id": "spk_b_perf_2.wav",
+          "file_path": "experiments/v3_0_identity_control/data/authorized/spk_b_perf_2.wav",
+          "sha256": "95578b71742c4c6aecf95a0111dc0182a984de4728588b5a4efde441fca85763",
+          "sample_rate_hz": 16000,
+          "channels": 1,
+          "duration_seconds": 6.024
+        },
+        {
+          "file_id": "spk_b_perf_3.wav",
+          "file_path": "experiments/v3_0_identity_control/data/authorized/spk_b_perf_3.wav",
+          "sha256": "fbf90aefad94a07fa26657642a429e3136a0c781d4bc8ba5d95b4e35fa1a42ab",
+          "sample_rate_hz": 16000,
+          "channels": 1,
+          "duration_seconds": 6.84
+        }
+      ]
+    }
+  ]
+}
